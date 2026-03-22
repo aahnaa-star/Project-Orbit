@@ -7,55 +7,122 @@ function CustomCursor() {
   const mouse   = useRef({ x: 0, y: 0 });
   const ring    = useRef({ x: 0, y: 0 });
   const raf     = useRef();
+  const isTouchDevice = useRef(false);
 
   useEffect(() => {
-    // Hide default cursor on the whole page
-    document.body.style.cursor = "none";
+    isTouchDevice.current = window.matchMedia("(hover: none)").matches;
 
-    const onMove = (e) => {
-      mouse.current = { x: e.clientX, y: e.clientY };
-      if (dotRef.current) {
-        dotRef.current.style.left = e.clientX + "px";
-        dotRef.current.style.top  = e.clientY + "px";
-      }
-    };
+    // ── DESKTOP CURSOR ──────────────────────────────────────────
+    if (!isTouchDevice.current) {
+      document.body.style.cursor = "none";
 
-    const animate = () => {
-      ring.current.x += (mouse.current.x - ring.current.x) * 0.12;
-      ring.current.y += (mouse.current.y - ring.current.y) * 0.12;
-      if (ringRef.current) {
-        ringRef.current.style.left = ring.current.x + "px";
-        ringRef.current.style.top  = ring.current.y + "px";
-      }
+      const onMove = (e) => {
+        mouse.current = { x: e.clientX, y: e.clientY };
+        if (dotRef.current) {
+          dotRef.current.style.left = e.clientX + "px";
+          dotRef.current.style.top  = e.clientY + "px";
+          dotRef.current.style.opacity = "1";
+        }
+      };
+
+      const animate = () => {
+        ring.current.x += (mouse.current.x - ring.current.x) * 0.12;
+        ring.current.y += (mouse.current.y - ring.current.y) * 0.12;
+        if (ringRef.current) {
+          ringRef.current.style.left = ring.current.x + "px";
+          ringRef.current.style.top  = ring.current.y + "px";
+        }
+        raf.current = requestAnimationFrame(animate);
+      };
+
+      const onEnter = () => {
+        if (dotRef.current)  { dotRef.current.style.width  = "20px"; dotRef.current.style.height  = "20px"; }
+        if (ringRef.current) { ringRef.current.style.width = "56px"; ringRef.current.style.height = "56px"; }
+      };
+      const onLeave = () => {
+        if (dotRef.current)  { dotRef.current.style.width  = "12px"; dotRef.current.style.height  = "12px"; }
+        if (ringRef.current) { ringRef.current.style.width = "36px"; ringRef.current.style.height = "36px"; }
+      };
+
+      document.addEventListener("mousemove", onMove);
+      document.querySelectorAll("a, button").forEach((el) => {
+        el.addEventListener("mouseenter", onEnter);
+        el.addEventListener("mouseleave", onLeave);
+      });
       raf.current = requestAnimationFrame(animate);
+
+      return () => {
+        document.body.style.cursor = "";
+        document.removeEventListener("mousemove", onMove);
+        cancelAnimationFrame(raf.current);
+      };
+    }
+
+    // ── MOBILE TOUCH RIPPLE ─────────────────────────────────────
+    const createRipple = (x, y) => {
+      const ripple = document.createElement("div");
+      ripple.style.cssText = `
+        position: fixed;
+        left: ${x}px;
+        top: ${y}px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(0, 212, 255, 0.6);
+        box-shadow: 0 0 12px #00d4ff, 0 0 30px rgba(0,212,255,0.4);
+        transform: translate(-50%, -50%) scale(1);
+        pointer-events: none;
+        z-index: 9999;
+        transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+      `;
+      document.body.appendChild(ripple);
+
+      // Outer ring
+      const ring = document.createElement("div");
+      ring.style.cssText = `
+        position: fixed;
+        left: ${x}px;
+        top: ${y}px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(0, 212, 255, 0.8);
+        transform: translate(-50%, -50%) scale(1);
+        pointer-events: none;
+        z-index: 9998;
+        transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+      `;
+      document.body.appendChild(ring);
+
+      requestAnimationFrame(() => {
+        ripple.style.transform = "translate(-50%, -50%) scale(4)";
+        ripple.style.opacity = "0";
+        ring.style.transform = "translate(-50%, -50%) scale(6)";
+        ring.style.opacity = "0";
+      });
+
+      setTimeout(() => {
+        ripple.remove();
+        ring.remove();
+      }, 600);
     };
 
-    const onEnter = () => {
-      if (dotRef.current)  { dotRef.current.style.width  = "20px"; dotRef.current.style.height  = "20px"; }
-      if (ringRef.current) { ringRef.current.style.width = "56px"; ringRef.current.style.height = "56px"; }
-    };
-    const onLeave = () => {
-      if (dotRef.current)  { dotRef.current.style.width  = "12px"; dotRef.current.style.height  = "12px"; }
-      if (ringRef.current) { ringRef.current.style.width = "36px"; ringRef.current.style.height = "36px"; }
+    const onTouch = (e) => {
+      const touch = e.touches[0] || e.changedTouches[0];
+      if (touch) createRipple(touch.clientX, touch.clientY);
     };
 
-    document.addEventListener("mousemove", onMove);
-    document.querySelectorAll("a, button").forEach((el) => {
-      el.addEventListener("mouseenter", onEnter);
-      el.addEventListener("mouseleave", onLeave);
-    });
-    raf.current = requestAnimationFrame(animate);
-
-    return () => {
-      document.body.style.cursor = "";
-      document.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf.current);
-    };
+    document.addEventListener("touchstart", onTouch, { passive: true });
+    return () => document.removeEventListener("touchstart", onTouch);
   }, []);
+
+  // Don't render cursor divs on touch devices
+  if (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches) {
+    return null;
+  }
 
   return (
     <>
-      {/* Dot */}
       <div ref={dotRef} style={{
         position: "fixed", pointerEvents: "none", zIndex: 9999,
         width: 12, height: 12, borderRadius: "50%",
@@ -63,8 +130,8 @@ function CustomCursor() {
         transform: "translate(-50%, -50%)",
         transition: "width 0.2s, height 0.2s",
         boxShadow: "0 0 10px #00d4ff, 0 0 30px rgba(0,212,255,0.5)",
+        opacity: 0,
       }} />
-      {/* Ring */}
       <div ref={ringRef} style={{
         position: "fixed", pointerEvents: "none", zIndex: 9998,
         width: 36, height: 36, borderRadius: "50%",
@@ -347,38 +414,38 @@ function Nav({ page, setPage }) {
 // ─── HERO ─────────────────────────────────────────────────────────────────────
 function Hero({ setPage }) {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-28 pb-20 overflow-hidden">
+    <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-5 pt-24 pb-16 overflow-hidden">
       <OrbitRings />
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-[600px] h-[400px] bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="w-[400px] md:w-[600px] h-[300px] md:h-[400px] bg-blue-500/10 rounded-full blur-3xl" />
       </div>
 
       {/* Badge */}
-      <div className="relative z-10 flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 rounded-full px-5 py-2 mb-10 animate-fade-down">
-        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-lg shadow-cyan-400" />
-        <span className="font-mono text-cyan-400 text-xs tracking-widest">Now Onboarding Students — Batch 2025</span>
+      <div className="relative z-10 flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 rounded-full px-4 py-2 mb-8 animate-fade-down">
+        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-lg shadow-cyan-400 flex-shrink-0" />
+        <span className="font-mono text-cyan-400 text-xs tracking-wide">Now Onboarding Students — Batch 2025</span>
       </div>
 
       {/* Headline */}
-      <h1 className="relative z-10 text-5xl md:text-7xl font-black leading-tight mb-6" style={{ fontFamily: "'Orbitron', monospace" }}>
+      <h1 className="relative z-10 text-4xl sm:text-5xl md:text-7xl font-black leading-tight mb-5" style={{ fontFamily: "'Orbitron', monospace" }}>
         <span className="block text-white">Launch Your</span>
         <span className="block bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent bg-[length:200%] animate-shimmer">
           Tech Career into Orbit
         </span>
       </h1>
 
-      <p className="relative z-10 max-w-xl text-slate-400 text-lg leading-relaxed mb-12">
+      <p className="relative z-10 max-w-lg text-slate-400 text-sm md:text-lg leading-relaxed mb-10 px-2">
         We help B.Tech students build stunning portfolios, access deploy-ready projects, create interview-winning documentation, and generate ATS-optimized resumes — everything you need to land your dream role.
       </p>
 
-      <div className="relative z-10 flex gap-4 flex-wrap justify-center">
+      <div className="relative z-10 flex flex-col sm:flex-row gap-3 w-full max-w-sm sm:max-w-none sm:justify-center px-2">
         <button onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })}
-          className="px-10 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-sm shadow-2xl shadow-cyan-500/40 hover:shadow-cyan-500/70 hover:-translate-y-1 transition-all"
+          className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-xs shadow-2xl shadow-cyan-500/40 transition-all cursor-pointer"
           style={{ fontFamily: "'Orbitron', monospace" }}>
           Explore Services
         </button>
         <button onClick={() => setPage("resume")}
-          className="px-10 py-4 rounded-xl border border-cyan-500/30 text-cyan-400 font-bold tracking-widest uppercase text-sm hover:bg-cyan-500/10 hover:border-cyan-400 hover:-translate-y-1 transition-all"
+          className="w-full sm:w-auto px-8 py-4 rounded-xl border border-cyan-500/30 text-cyan-400 font-bold tracking-widest uppercase text-xs hover:bg-cyan-500/10 transition-all cursor-pointer"
           style={{ fontFamily: "'Orbitron', monospace" }}>
           Build Resume ✨
         </button>
@@ -399,17 +466,18 @@ function Hero({ setPage }) {
 // ─── STATS ────────────────────────────────────────────────────────────────────
 function Stats() {
   const items = [
-    { num: "80+", label: "Portfolios Built" },
+    { num: "500+", label: "Portfolios Built" },
     { num: "120+", label: "Deploy-Ready Projects" },
     { num: "98%",  label: "Placement Success" },
     { num: "4",    label: "Service Verticals" },
   ];
   return (
-    <div className="relative z-10 flex flex-wrap justify-center gap-0 px-6 mb-28 reveal">
+    <div className="relative z-10 grid grid-cols-2 md:flex md:flex-row justify-center gap-4 md:gap-0 px-6 mb-20 reveal max-w-2xl mx-auto">
       {items.map((s, i) => (
-        <div key={i} className={`flex flex-col items-center px-12 py-10 border border-cyan-500/15 bg-[#0a1428]/70 backdrop-blur-xl ${i === 0 ? "rounded-l-2xl" : ""} ${i === items.length - 1 ? "rounded-r-2xl" : ""} ${i > 0 ? "border-l-0" : ""}`}>
-          <span className="font-black text-3xl bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent" style={{ fontFamily: "'Orbitron', monospace" }}>{s.num}</span>
-          <span className="text-slate-500 text-xs tracking-widest uppercase mt-1">{s.label}</span>
+        <div key={i} className="flex flex-col items-center px-6 py-8 md:px-12 md:py-10 border border-cyan-500/15 bg-[#0a1428]/70 backdrop-blur-xl rounded-2xl md:rounded-none
+          md:first:rounded-l-2xl md:last:rounded-r-2xl">
+          <span className="font-black text-2xl md:text-3xl bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent" style={{ fontFamily: "'Orbitron', monospace" }}>{s.num}</span>
+          <span className="text-slate-500 text-xs tracking-widest uppercase mt-1 text-center">{s.label}</span>
         </div>
       ))}
     </div>
@@ -573,6 +641,110 @@ function HowItWorks() {
 
 // ─── CTA ──────────────────────────────────────────────────────────────────────
 // ─── TESTIMONIALS ─────────────────────────────────────────────────────────────
+function Testimonials() {
+  const reviews = [
+    {
+      name: "Rahul Sharma",
+      college: "JNTU Hyderabad, CSE Final Year",
+      avatar: "RS",
+      color: "from-blue-500 to-cyan-400",
+      rating: 5,
+      pack: "Resume Booster Pack",
+      text: "I had zero projects on my resume before this. After getting the Resume Booster Pack, I had 3 solid projects with full documentation. Got my first interview call within a week. Totally worth every rupee!",
+    },
+    {
+      name: "Priya Reddy",
+      college: "VIT Vellore, IT 3rd Year",
+      avatar: "PR",
+      color: "from-purple-500 to-pink-400",
+      rating: 5,
+      pack: "Job Ready Pack",
+      text: "The portfolio website they built for me is insane — my classmates kept asking who made it. The ATS resume is clean and professional. Already got shortlisted for 2 internships this month!",
+    },
+    {
+      name: "Karthik Naidu",
+      college: "Andhra University, ECE Final Year",
+      avatar: "KN",
+      color: "from-green-500 to-emerald-400",
+      rating: 5,
+      pack: "Starter Pack",
+      text: "As an ECE student switching to software, I had no idea where to start. They gave me a working project with GitHub setup and even helped me with how to explain it in interviews. Super responsive on WhatsApp!",
+    },
+    {
+      name: "Divya Lakshmi",
+      college: "SRM Chennai, CSE 4th Year",
+      avatar: "DL",
+      color: "from-amber-500 to-orange-400",
+      rating: 5,
+      pack: "Placement Pack",
+      text: "Got the full Placement Pack — portfolio, high-level project, IEEE docs, and ATS resume — all under ₹999 during the launch offer. The quality shocked me honestly. Landed a ₹4.5 LPA offer at campus placements!",
+    },
+  ];
+
+  return (
+    <section className="relative z-10 px-6 md:px-16 pb-28">
+      <div className="reveal text-center mb-14">
+        <p className="flex items-center justify-center gap-3 text-cyan-400 font-mono text-xs tracking-widest uppercase mb-3">
+          <span className="w-8 h-px bg-cyan-400" />Student Reviews<span className="w-8 h-px bg-cyan-400" />
+        </p>
+        <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ fontFamily: "'Orbitron', monospace" }}>
+          What Students Say
+        </h2>
+        <p className="text-slate-400 max-w-lg mx-auto text-base">Real results from real B.Tech students across India.</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        {reviews.map((r, i) => (
+          <div key={i} className="reveal group bg-[#0a1428]/70 border border-cyan-500/15 rounded-2xl p-8 backdrop-blur-xl hover:-translate-y-1 hover:border-cyan-500/30 transition-all duration-300"
+            style={{ transitionDelay: `${i * 80}ms` }}>
+            {/* Stars */}
+            <div className="flex gap-1 mb-4">
+              {Array(r.rating).fill(0).map((_, j) => (
+                <span key={j} className="text-amber-400 text-sm">★</span>
+              ))}
+            </div>
+
+            {/* Review text */}
+            <p className="text-slate-300 text-sm leading-relaxed mb-6 italic">"{r.text}"</p>
+
+            {/* Pack badge */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {/* Avatar */}
+                <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${r.color} flex items-center justify-center text-white text-xs font-black flex-shrink-0`}>
+                  {r.avatar}
+                </div>
+                <div>
+                  <p className="text-white font-bold text-sm">{r.name}</p>
+                  <p className="text-slate-500 text-xs font-mono">{r.college}</p>
+                </div>
+              </div>
+              <span className="text-xs font-mono bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 px-3 py-1 rounded-full hidden sm:block">
+                {r.pack}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Social proof bar */}
+      <div className="reveal mt-12 flex flex-wrap justify-center gap-8 text-center">
+        {[
+          { num: "500+", label: "Students Served" },
+          { num: "4.9★", label: "Average Rating" },
+          { num: "98%", label: "Would Recommend" },
+          { num: "72hrs", label: "Avg Delivery Time" },
+        ].map((s, i) => (
+          <div key={i}>
+            <p className="text-2xl font-black bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent"
+              style={{ fontFamily: "'Orbitron', monospace" }}>{s.num}</p>
+            <p className="text-slate-500 text-xs font-mono tracking-wide mt-1">{s.label}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 function FAQ() {
   const [open, setOpen] = useState(null);
 
@@ -643,34 +815,34 @@ function FAQ() {
 // ─── CTA ──────────────────────────────────────────────────────────────────────
 function CTA({ setPage }) {
   return (
-    <section id="contact" className="relative z-10 px-6 md:px-16 pb-32">
-      <div className="reveal max-w-3xl mx-auto bg-[#0a1428]/80 border border-cyan-500/20 rounded-3xl p-16 text-center relative overflow-hidden backdrop-blur-2xl">
+    <section id="contact" className="relative z-10 px-4 md:px-16 pb-20">
+      <div className="reveal max-w-3xl mx-auto bg-[#0a1428]/80 border border-cyan-500/20 rounded-2xl p-8 md:p-16 text-center relative overflow-hidden backdrop-blur-2xl">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-40 bg-blue-500/15 blur-3xl rounded-full pointer-events-none" />
-        <p className="flex items-center justify-center gap-3 text-cyan-400 font-mono text-xs tracking-widest uppercase mb-5">
-          <span className="w-8 h-px bg-cyan-400" />Ready to Launch?<span className="w-8 h-px bg-cyan-400" />
+        <p className="flex items-center justify-center gap-3 text-cyan-400 font-mono text-xs tracking-widest uppercase mb-4">
+          <span className="w-6 h-px bg-cyan-400" />Ready to Launch?<span className="w-6 h-px bg-cyan-400" />
         </p>
-        <h2 className="text-4xl md:text-5xl font-black mb-4 leading-tight" style={{ fontFamily: "'Orbitron', monospace" }}>
+        <h2 className="text-3xl md:text-5xl font-black mb-4 leading-tight" style={{ fontFamily: "'Orbitron', monospace" }}>
           Your career starts<br />
           <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">here and now.</span>
         </h2>
-        <p className="text-slate-400 text-base mb-10 max-w-lg mx-auto leading-relaxed">
+        <p className="text-slate-400 text-sm md:text-base mb-8 max-w-lg mx-auto leading-relaxed">
           Join hundreds of B.Tech students who've used Aahnaa Technologies to break into the tech industry with confidence.
         </p>
-        <div className="flex gap-4 justify-center flex-wrap">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
           <a href={`mailto:${MAIL}`}
-            className="px-10 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-sm shadow-xl shadow-cyan-500/30 hover:shadow-cyan-500/60 hover:-translate-y-1 transition-all"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-xs shadow-xl shadow-cyan-500/30 transition-all text-center"
             style={{ fontFamily: "'Orbitron', monospace" }}>
             Email Us
           </a>
           <a href={WA_LINK} target="_blank" rel="noreferrer"
-            className="px-10 py-4 rounded-xl border border-cyan-500/30 text-cyan-400 font-bold tracking-widest uppercase text-sm hover:bg-cyan-500/10 hover:border-cyan-400 hover:-translate-y-1 transition-all"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl border border-cyan-500/30 text-cyan-400 font-bold tracking-widest uppercase text-xs hover:bg-cyan-500/10 transition-all text-center"
             style={{ fontFamily: "'Orbitron', monospace" }}>
             WhatsApp Us
           </a>
           <button onClick={() => setPage("resume")}
-            className="px-10 py-4 rounded-xl border border-blue-500/30 text-blue-400 font-bold tracking-widest uppercase text-sm hover:bg-blue-500/10 hover:border-blue-400 hover:-translate-y-1 transition-all"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl border border-blue-500/30 text-blue-400 font-bold tracking-widest uppercase text-xs hover:bg-blue-500/10 transition-all cursor-pointer"
             style={{ fontFamily: "'Orbitron', monospace" }}>
-            Build My Resume ✨
+            Build Resume ✨
           </button>
         </div>
       </div>
@@ -706,7 +878,7 @@ const BUNDLES = [
   {
     icon: "💼", name: "Job Ready Pack", badge: "⭐ Most Popular",
     highlight: false,
-    original: "₹1,999", price: "₹599", amount: 599,
+    original: "₹1,999", price: "₹499", amount: 499,
     desc: "The complete package most students choose for placements.",
     includes: ["Medium Full-Stack Project", "Pro IEEE Documentation", "ATS Resume (Free)", "Vercel Deployment", "Delivered in 3 days"],
     color: "from-blue-500/15 to-cyan-900/10", border: "border-cyan-400/40", badgeCls: "bg-cyan-500/15 text-cyan-400 border-cyan-400/30",
@@ -722,7 +894,7 @@ const BUNDLES = [
   {
     icon: "🌐", name: "Portfolio Pack", badge: "Stand Out Online",
     highlight: false,
-    original: "₹1,499", price: "₹499", amount: 499,
+    original: "₹1,499", price: "₹399", amount: 399,
     desc: "A stunning portfolio + ATS resume to impress recruiters.",
     includes: ["Pro Portfolio Website", "Custom Design + Animations", "ATS Resume (Free)", "Mobile Responsive", "Delivered in 4 days"],
     color: "from-purple-500/10 to-purple-900/5", border: "border-purple-400/20", badgeCls: "bg-purple-500/15 text-purple-400 border-purple-400/30",
@@ -944,17 +1116,17 @@ function Pricing({ setPage }) {
 // ─── FOOTER ───────────────────────────────────────────────────────────────────
 function Footer({ setPage }) {
   return (
-    <footer className="relative z-10 border-t border-cyan-500/10 px-6 md:px-16 py-10 flex flex-col md:flex-row items-center justify-between gap-6" style={{ backgroundColor: "#050b18" }}>
+    <footer className="relative z-10 border-t border-cyan-500/10 px-6 md:px-16 py-10 flex flex-col items-center gap-6" style={{ backgroundColor: "#050b18" }}>
       <button onClick={() => setPage("home")} className="font-bold tracking-widest text-sm cursor-pointer" style={{ fontFamily: "'Orbitron', monospace" }}>
         Aahnaa <span className="text-cyan-400">Technologies</span>
       </button>
-      <p className="text-slate-500 text-xs font-mono">© 2026 Aahnaa Technologies. All rights reserved.</p>
-      <div className="flex gap-6">
+      <div className="flex flex-wrap justify-center gap-4">
         {["Services", "Projects", "Pricing", "FAQ", "Contact"].map((l) => (
           <a key={l} href={`#${l.toLowerCase()}`} className="text-slate-500 hover:text-cyan-400 text-xs tracking-widest uppercase transition-colors">{l}</a>
         ))}
         <button onClick={() => setPage("resume")} className="text-slate-500 hover:text-cyan-400 text-xs tracking-widest uppercase transition-colors cursor-pointer">Resume</button>
       </div>
+      <p className="text-slate-500 text-xs font-mono text-center">© 2025 Aahnaa Technologies. All rights reserved.</p>
     </footer>
   );
 }
@@ -1522,181 +1694,185 @@ function OrderPage({ setPage }) {
   };
 
   return (
-    <div className="relative z-10 min-h-screen pt-28 px-6 md:px-12 pb-20">
+    <div className="relative z-10 min-h-screen pt-24 px-4 md:px-10 lg:px-16 pb-20">
       {/* Header */}
-      <div className="text-center mb-10">
+      <div className="text-center mb-6">
         <p className="flex items-center justify-center gap-3 text-cyan-400 font-mono text-xs tracking-widest uppercase mb-3">
-          <span className="w-8 h-px bg-cyan-400" />Place Your Order<span className="w-8 h-px bg-cyan-400" />
+          <span className="w-6 h-px bg-cyan-400" />Place Your Order<span className="w-6 h-px bg-cyan-400" />
         </p>
-        <h2 className="text-4xl md:text-5xl font-black mb-3" style={{ fontFamily: "'Orbitron', monospace" }}>Order Now</h2>
-        <p className="text-slate-400 max-w-md mx-auto text-sm">Select your service, fill your details, pay via UPI and we'll get started!</p>
+        <h2 className="text-3xl md:text-5xl font-black mb-2" style={{ fontFamily: "'Orbitron', monospace" }}>Order Now</h2>
+        <p className="text-slate-400 max-w-lg mx-auto text-sm">Select your service · Fill your details · Pay via UPI · We deliver!</p>
       </div>
 
-      <div className="max-w-2xl mx-auto">
+      {/* Progress */}
+      <div className="max-w-xl mx-auto mb-8">
         <Progress />
+      </div>
 
-        <div className="bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-8 backdrop-blur-xl">
+      {/* ── STEP 1: Two column on desktop ── */}
+      {step === 1 && (
+        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left — Service Selection */}
+          <div className="bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-5 md:p-6 backdrop-blur-xl">
+            <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2" style={{ fontFamily: "'Orbitron', monospace" }}>
+              <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-xs font-black flex-shrink-0">1</span>
+              Choose Your Service
+            </h3>
+            <p className="text-xs font-mono text-amber-400/80 tracking-widest uppercase mb-2">🔥 Combo Packs</p>
+            <div className="space-y-2 mb-4">
+              {[
+                { key: "booster",   label: "⚡ Resume Booster Pack", price: "₹699", badge: "🔥 Best Seller" },
+                { key: "starter",   label: "🚀 Starter Pack",         price: "₹299", badge: "Freshers" },
+                { key: "jobready",  label: "💼 Job Ready Pack",        price: "₹499", badge: "⭐ Popular" },
+                { key: "placement", label: "👑 Placement Pack",        price: "₹999", badge: "Max Value" },
+                { key: "portfolio", label: "🌐 Portfolio Pack",        price: "₹399", badge: "Stand Out" },
+              ].map((s) => (
+                <button key={s.key} onClick={() => { setService(s.key); setTier(Object.keys(SERVICES_CONFIG[s.key].tiers)[0]); }}
+                  className={`w-full text-left px-4 py-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-2
+                    ${service === s.key ? "border-cyan-400 bg-cyan-500/10" : "border-cyan-500/20 bg-[#050b18] hover:border-cyan-500/40"}`}>
+                  <span className="font-bold text-sm text-white truncate">{s.label}</span>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <span className="text-xs font-mono text-slate-500 hidden md:block">{s.badge}</span>
+                    <span className="text-cyan-400 font-black text-sm" style={{ fontFamily: "'Orbitron', monospace" }}>{s.price}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+            <p className="text-xs font-mono text-slate-500 tracking-widest uppercase mb-2">⚙️ Individual Services</p>
+            <div className="space-y-2">
+              {[
+                { key: "port_ind", label: "🌐 Portfolio Website" },
+                { key: "proj_ind", label: "🚀 Deploy-Ready Project" },
+                { key: "docs_ind", label: "📄 Interview Docs" },
+              ].map((s) => (
+                <button key={s.key} onClick={() => { setService(s.key); setTier(""); }}
+                  className={`w-full text-left px-4 py-3 rounded-xl border transition-all cursor-pointer
+                    ${service === s.key ? "border-cyan-400 bg-cyan-500/10" : "border-cyan-500/20 bg-[#050b18] hover:border-cyan-500/40"}`}>
+                  <span className="font-bold text-sm text-white">{s.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
 
-          {/* ── STEP 1: Select Service & Tier ── */}
-          {step === 1 && (
-            <div className="space-y-6">
-              <h3 className="text-base font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "'Orbitron', monospace" }}>
-                <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-sm font-black">1</span>
-                Choose Your Service
-              </h3>
+          {/* Right — Tier & Confirm */}
+          <div className="bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-5 md:p-6 backdrop-blur-xl flex flex-col">
+            <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2" style={{ fontFamily: "'Orbitron', monospace" }}>
+              <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-xs font-black flex-shrink-0">2</span>
+              Confirm Your Plan
+            </h3>
 
-              {/* Bundles */}
-              <p className="text-xs font-mono text-amber-400/80 tracking-widest uppercase mb-2">🔥 Combo Packs — Best Value</p>
-              <div className="grid grid-cols-1 gap-3 mb-5">
-                {[
-                  { key: "booster",   label: "⚡ Resume Booster Pack – 3 Projects", price: "₹699", badge: "🔥 Best Seller" },
-                  { key: "starter",   label: "🚀 Starter Pack",   price: "₹299", badge: "Best for Freshers" },
-                  { key: "jobready",  label: "💼 Job Ready Pack",  price: "₹499", badge: "⭐ Most Popular" },
-                  { key: "placement", label: "👑 Placement Pack",  price: "₹999", badge: "Maximum Value" },
-                  { key: "portfolio", label: "🌐 Portfolio Pack",  price: "₹399", badge: "Stand Out Online" },
-                ].map((s) => (
-                  <button key={s.key} onClick={() => { setService(s.key); setTier(Object.keys(SERVICES_CONFIG[s.key].tiers)[0]); }}
-                    className={`w-full text-left px-5 py-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between
-                      ${service === s.key ? "border-cyan-400 bg-cyan-500/10" : "border-cyan-500/20 bg-[#050b18] hover:border-cyan-500/40"}`}>
-                    <span className="font-bold text-sm text-white">{s.label}</span>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs font-mono text-slate-500 hidden sm:block">{s.badge}</span>
-                      <span className="text-cyan-400 font-black text-sm" style={{ fontFamily: "'Orbitron', monospace" }}>{s.price}</span>
-                    </div>
-                  </button>
-                ))}
+            {!service && (
+              <div className="flex-1 flex items-center justify-center py-16">
+                <div className="text-center">
+                  <div className="text-4xl mb-3">👈</div>
+                  <p className="text-slate-500 text-sm font-mono">Select a service first</p>
+                </div>
               </div>
+            )}
 
-              {/* Individual add-ons */}
-              <p className="text-xs font-mono text-slate-500 tracking-widest uppercase mb-2">⚙️ Individual Services</p>
-              <div className="grid grid-cols-1 gap-3">
-                {[
-                  { key: "port_ind",  label: "🌐 Portfolio Website" },
-                  { key: "proj_ind",  label: "🚀 Deploy-Ready Project" },
-                  { key: "docs_ind",  label: "📄 Interview Docs" },
-                ].map((s) => (
-                  <button key={s.key} onClick={() => { setService(s.key); setTier(""); }}
-                    className={`w-full text-left px-5 py-3.5 rounded-xl border transition-all cursor-pointer
-                      ${service === s.key ? "border-cyan-400 bg-cyan-500/10" : "border-cyan-500/20 bg-[#050b18] hover:border-cyan-500/40"}`}>
-                    <span className="font-bold text-sm text-white">{s.label}</span>
-                  </button>
-                ))}
+            {service && Object.keys(SERVICES_CONFIG[service].tiers).length > 1 && (
+              <div className="mb-4">
+                <p className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase mb-3">Select Tier</p>
+                <div className="grid grid-cols-3 gap-3">
+                  {Object.entries(SERVICES_CONFIG[service].tiers).map(([t, price]) => (
+                    <button key={t} onClick={() => setTier(t)}
+                      className={`py-4 rounded-xl border text-center transition-all cursor-pointer
+                        ${tier === t ? "border-cyan-400 bg-cyan-500/10" : "border-cyan-500/20 bg-[#050b18] hover:border-cyan-500/40"}`}>
+                      <div className="font-bold text-sm text-white" style={{ fontFamily: "'Orbitron', monospace" }}>{t}</div>
+                      <div className="text-cyan-400 font-black text-lg mt-1" style={{ fontFamily: "'Orbitron', monospace" }}>₹{price}</div>
+                      {tier === t && <div className="text-xs text-green-400 font-mono mt-1">✓</div>}
+                    </button>
+                  ))}
+                </div>
               </div>
+            )}
 
-              {/* Tier select — only for individual services */}
-              {service && Object.keys(SERVICES_CONFIG[service].tiers).length > 1 && (
-                <div className="bg-[#050b18] border border-cyan-500/15 rounded-2xl p-5">
-                  <p className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase mb-3">
-                    👇 Select Your Tier
-                  </p>
-                  <div className="grid grid-cols-3 gap-3">
-                    {Object.entries(SERVICES_CONFIG[service].tiers).map(([t, price]) => (
-                      <button key={t} onClick={() => setTier(t)}
-                        className={`py-4 rounded-xl border text-center transition-all cursor-pointer
-                          ${tier === t
-                            ? "border-cyan-400 bg-cyan-500/10 shadow-lg shadow-cyan-500/10"
-                            : "border-cyan-500/20 bg-[#050b18] hover:border-cyan-500/40"}`}>
-                        <div className="font-bold text-sm text-white" style={{ fontFamily: "'Orbitron', monospace" }}>{t}</div>
-                        <div className="text-cyan-400 font-black text-lg mt-1" style={{ fontFamily: "'Orbitron', monospace" }}>₹{price}</div>
-                        {tier === t && <div className="text-xs text-green-400 font-mono mt-1">✓ Selected</div>}
-                      </button>
-                    ))}
-                  </div>
+            {service && Object.keys(SERVICES_CONFIG[service].tiers).length === 1 && (
+              <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 flex items-center gap-3 mb-4">
+                <span className="text-green-400 text-2xl">✓</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-green-400 text-sm font-bold">Pack Selected!</p>
+                  <p className="text-slate-400 text-xs font-mono mt-0.5 truncate">{SERVICES_CONFIG[service].label}</p>
                 </div>
-              )}
+                <span className="text-2xl font-black text-cyan-400 flex-shrink-0" style={{ fontFamily: "'Orbitron', monospace" }}>
+                  ₹{Object.values(SERVICES_CONFIG[service].tiers)[0]}
+                </span>
+              </div>
+            )}
 
-              {/* Bundle auto-selected confirmation */}
-              {service && Object.keys(SERVICES_CONFIG[service].tiers).length === 1 && (
-                <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 flex items-center gap-3">
-                  <span className="text-green-400 text-xl">✓</span>
-                  <div>
-                    <p className="text-green-400 text-sm font-bold">Pack Selected!</p>
-                    <p className="text-slate-400 text-xs font-mono mt-0.5">{SERVICES_CONFIG[service].label}</p>
-                  </div>
-                  <span className="ml-auto text-2xl font-black text-cyan-400" style={{ fontFamily: "'Orbitron', monospace" }}>
-                    ₹{Object.values(SERVICES_CONFIG[service].tiers)[0]}
-                  </span>
+            {canProceedStep1 && Object.keys(SERVICES_CONFIG[service].tiers).length > 1 && (
+              <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-center justify-between mb-4">
+                <div className="min-w-0 flex-1 pr-3">
+                  <p className="text-xs text-slate-400 font-mono">Selected</p>
+                  <p className="text-white font-bold text-sm truncate">{SERVICES_CONFIG[service].label} — {tier}</p>
                 </div>
-              )}
+                <span className="text-2xl font-black text-cyan-400 flex-shrink-0" style={{ fontFamily: "'Orbitron', monospace" }}>₹{amount}</span>
+              </div>
+            )}
 
-              {/* Tier selected summary — only for individual services */}
-              {canProceedStep1 && Object.keys(SERVICES_CONFIG[service].tiers).length > 1 && (
-                <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-slate-400 font-mono">Selected</p>
-                    <p className="text-white font-bold text-sm">{SERVICES_CONFIG[service].label} — {tier}</p>
-                  </div>
-                  <span className="text-2xl font-black text-cyan-400" style={{ fontFamily: "'Orbitron', monospace" }}>₹{amount}</span>
-                </div>
-              )}
-
+            <div className="mt-auto pt-4">
               <button onClick={() => setStep(2)} disabled={!canProceedStep1}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-sm shadow-lg shadow-cyan-500/20 hover:-translate-y-0.5 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                className="w-full py-4 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-sm shadow-lg shadow-cyan-500/20 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                 style={{ fontFamily: "'Orbitron', monospace" }}>
                 Continue →
               </button>
             </div>
-          )}
+          </div>
+        </div>
+      )}
 
-          {/* ── STEP 2: Details Form ── */}
-          {step === 2 && (
-            <div className="space-y-5">
-              <h3 className="text-base font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "'Orbitron', monospace" }}>
-                <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-sm font-black">2</span>
-                Your Details
-              </h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { label: "Full Name *", key: "name", placeholder: "Your Full Name" },
-                  { label: "Email *", key: "email", placeholder: "you@example.com", type: "email" },
-                  { label: "Phone *", key: "phone", placeholder: "+91 XXXXX XXXXX" },
-                ].map((f) => (
-                  <div key={f.key}>
-                    <label className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase mb-1.5 block">{f.label}</label>
-                    <input type={f.type || "text"} value={form[f.key]}
-                      onChange={(e) => setForm((d) => ({ ...d, [f.key]: e.target.value }))}
-                      placeholder={f.placeholder}
-                      className="w-full bg-[#050b18] border border-cyan-500/20 rounded-xl px-4 py-3 text-slate-200 text-sm placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-all" />
-                  </div>
-                ))}
+      {/* ── STEP 2: Details ── */}
+      {step === 2 && (
+        <div className="max-w-2xl mx-auto bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-5 md:p-8 backdrop-blur-xl">
+          <h3 className="text-sm font-bold text-white mb-5 flex items-center gap-2" style={{ fontFamily: "'Orbitron', monospace" }}>
+            <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-xs font-black flex-shrink-0">2</span>
+            Your Details
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            {[
+              { label: "Full Name *", key: "name", placeholder: "Your Full Name" },
+              { label: "Email *", key: "email", placeholder: "you@example.com", type: "email" },
+              { label: "Phone *", key: "phone", placeholder: "+91 XXXXX XXXXX" },
+            ].map((f) => (
+              <div key={f.key}>
+                <label className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase mb-1.5 block">{f.label}</label>
+                <input type={f.type || "text"} value={form[f.key]}
+                  onChange={(e) => setForm((d) => ({ ...d, [f.key]: e.target.value }))}
+                  placeholder={f.placeholder}
+                  className="w-full bg-[#050b18] border border-cyan-500/20 rounded-xl px-4 py-3 text-slate-200 text-sm placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-all" />
               </div>
+            ))}
+          </div>
+          <div className="mb-4">
+            <label className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase mb-1.5 block">Your Requirement *</label>
+            <textarea rows={4} value={form.requirement}
+              onChange={(e) => setForm((d) => ({ ...d, requirement: e.target.value }))}
+              placeholder="Describe what you need — tech stack, project idea, domain, specific requirements..."
+              className="w-full bg-[#050b18] border border-cyan-500/20 rounded-xl px-4 py-3 text-slate-200 text-sm placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-all resize-none" />
+          </div>
+          <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-center justify-between mb-5">
+            <p className="text-slate-300 text-sm truncate pr-2">{SERVICES_CONFIG[service]?.label}</p>
+            <span className="text-xl font-black text-cyan-400 flex-shrink-0" style={{ fontFamily: "'Orbitron', monospace" }}>₹{amount}</span>
+          </div>
+          <div className="flex gap-3">
+            <button onClick={() => setStep(1)} className="px-5 py-3 rounded-xl border border-cyan-500/20 text-slate-400 text-sm font-mono hover:border-cyan-400 hover:text-cyan-400 transition-all cursor-pointer flex-shrink-0">← Back</button>
+            <button onClick={() => setStep(3)} disabled={!canProceedStep2}
+              className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-sm shadow-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+              style={{ fontFamily: "'Orbitron', monospace" }}>
+              Proceed to Payment →
+            </button>
+          </div>
+        </div>
+      )}
 
-              <div>
-                <label className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase mb-1.5 block">Your Requirement *</label>
-                <textarea rows={4} value={form.requirement}
-                  onChange={(e) => setForm((d) => ({ ...d, requirement: e.target.value }))}
-                  placeholder="Describe what you need — e.g. tech stack, project idea, domain, any specific requirements..."
-                  className="w-full bg-[#050b18] border border-cyan-500/20 rounded-xl px-4 py-3 text-slate-200 text-sm placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-all resize-none" />
-              </div>
-
-              {/* Order summary */}
-              <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-center justify-between">
-                <p className="text-slate-300 text-sm">{SERVICES_CONFIG[service].label} — <span className="text-cyan-400">{tier}</span></p>
-                <span className="text-xl font-black text-cyan-400" style={{ fontFamily: "'Orbitron', monospace" }}>₹{amount}</span>
-              </div>
-
-              <div className="flex gap-3">
-                <button onClick={() => setStep(1)}
-                  className="px-6 py-3 rounded-xl border border-cyan-500/20 text-slate-400 text-sm font-mono hover:border-cyan-400 hover:text-cyan-400 transition-all cursor-pointer">
-                  ← Back
-                </button>
-                <button onClick={() => setStep(3)} disabled={!canProceedStep2}
-                  className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-sm shadow-lg shadow-cyan-500/20 hover:-translate-y-0.5 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-                  style={{ fontFamily: "'Orbitron', monospace" }}>
-                  Proceed to Payment →
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* ── STEP 3: UPI Payment ── */}
-          {step === 3 && (
-            <div className="space-y-6">
-              <h3 className="text-base font-bold text-white mb-2 flex items-center gap-3" style={{ fontFamily: "'Orbitron', monospace" }}>
-                <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-sm font-black">3</span>
-                Pay via UPI
-              </h3>
+      {/* ── STEP 3: Payment ── */}
+      {step === 3 && (
+        <div className="max-w-md mx-auto space-y-4">
+          <div className="bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-5 backdrop-blur-xl">
+            <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2" style={{ fontFamily: "'Orbitron', monospace" }}>
+              <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-xs font-black flex-shrink-0">3</span>
+              Pay via UPI
+            </h3>
 
               {/* ── Creative Payment Card ── */}
               <div className="relative rounded-3xl p-px overflow-hidden"
@@ -1707,7 +1883,7 @@ function OrderPage({ setPage }) {
                   @keyframes ping2 { 0%{transform:scale(1);opacity:0.8} 100%{transform:scale(2.5);opacity:0} }
                 `}</style>
 
-                <div className="relative rounded-3xl bg-[#060d1f] overflow-hidden p-8">
+                <div className="relative rounded-3xl bg-[#060d1f] overflow-hidden p-5 sm:p-8">
                   {/* Background orbs */}
                   <div className="absolute top-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
                   <div className="absolute bottom-0 right-0 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
@@ -1728,19 +1904,22 @@ function OrderPage({ setPage }) {
                   </div>
 
                   {/* Amount display */}
-                  <div className="relative text-center mb-8">
-                    <p className="text-slate-500 text-xs font-mono tracking-widest uppercase mb-2">Total Amount</p>
-                    <div className="flex items-center justify-center gap-1">
-                      <span className="text-2xl text-cyan-400 font-bold mt-2">₹</span>
-                      <span className="text-7xl font-black text-white" style={{ fontFamily: "'Orbitron', monospace", textShadow: "0 0 40px rgba(0,212,255,0.3)" }}>
+                  <div className="relative text-center mb-6">
+                    <p className="text-slate-500 text-xs font-mono tracking-widest uppercase mb-3">Total Amount</p>
+                    <div className="flex items-baseline justify-center gap-1">
+                      <span className="text-2xl text-cyan-400 font-bold">₹</span>
+                      <span className="text-5xl sm:text-6xl font-black text-white" style={{ fontFamily: "'Orbitron', monospace", textShadow: "0 0 40px rgba(0,212,255,0.3)" }}>
                         {amount}
                       </span>
                     </div>
-                    <p className="text-slate-400 text-xs font-mono mt-2">{SERVICES_CONFIG[service]?.label} — {tier} Plan</p>
+                    {/* Clean service label — no repetition */}
+                    <p className="text-slate-400 text-xs font-mono mt-2 px-2 leading-relaxed">
+                      {SERVICES_CONFIG[service]?.label?.replace(/^[^\w]*/, '')}
+                    </p>
                   </div>
 
                   {/* UPI Apps row */}
-                  <div className="relative flex justify-center gap-4 mb-8">
+                  <div className="relative flex justify-center gap-3 sm:gap-4 mb-6">
                     {[
                       { name: "GPay", color: "#4285F4", emoji: "G" },
                       { name: "PhonePe", color: "#5F259F", emoji: "P" },
@@ -1748,10 +1927,10 @@ function OrderPage({ setPage }) {
                       { name: "BHIM", color: "#00A550", emoji: "B" },
                     ].map((app) => (
                       <a key={app.name}
-                        href={`upi://pay?pa=${UPI_ID}&pn=Aahnaa+Technologies&am=${amount}&cu=INR&tn=${encodeURIComponent(`${SERVICES_CONFIG[service]?.label} - ${tier}`)}`}
-                        className="flex flex-col items-center gap-1.5 group cursor-pointer">
-                        <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-lg transition-all group-hover:-translate-y-1 group-hover:shadow-lg"
-                          style={{ background: app.color, boxShadow: `0 4px 20px ${app.color}40` }}>
+                        href={`upi://pay?pa=${UPI_ID}&pn=Aahnaa+Technologies&am=${amount}&cu=INR`}
+                        className="flex flex-col items-center gap-1.5 cursor-pointer">
+                        <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-lg"
+                          style={{ background: app.color, boxShadow: `0 4px 16px ${app.color}50` }}>
                           {app.emoji}
                         </div>
                         <span className="text-slate-500 text-xs font-mono">{app.name}</span>
@@ -1760,25 +1939,25 @@ function OrderPage({ setPage }) {
                   </div>
 
                   {/* Divider */}
-                  <div className="relative flex items-center gap-3 mb-6">
+                  <div className="relative flex items-center gap-3 mb-5">
                     <div className="flex-1 h-px bg-gradient-to-r from-transparent to-cyan-500/30" />
-                    <span className="text-slate-500 text-xs font-mono px-2">or pay using UPI ID</span>
+                    <span className="text-slate-500 text-xs font-mono px-2 whitespace-nowrap">or pay using UPI ID</span>
                     <div className="flex-1 h-px bg-gradient-to-l from-transparent to-cyan-500/30" />
                   </div>
 
                   {/* UPI ID copy */}
-                  <div className="relative flex items-center gap-3 bg-[#0a1428] border border-cyan-500/20 rounded-2xl px-5 py-4 mb-6">
-                    <div className="flex-1">
+                  <div className="relative flex items-center gap-2 bg-[#0a1428] border border-cyan-500/20 rounded-2xl px-4 py-3 mb-5">
+                    <div className="flex-1 min-w-0">
                       <p className="text-slate-500 text-xs font-mono mb-0.5">UPI ID</p>
-                      <p className="text-cyan-400 font-mono font-bold tracking-wider text-base">{UPI_ID}</p>
+                      <p className="text-cyan-400 font-mono font-bold text-sm truncate">{UPI_ID}</p>
                     </div>
                     <button onClick={copyUPI}
-                      className={`px-5 py-2.5 rounded-xl text-xs font-bold tracking-widest uppercase border transition-all cursor-pointer
+                      className={`flex-shrink-0 px-4 py-2 rounded-xl text-xs font-bold tracking-widest uppercase border transition-all cursor-pointer
                         ${copied
-                          ? "border-green-500 text-green-400 bg-green-500/15 shadow-lg shadow-green-500/20"
-                          : "border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-400"}`}
+                          ? "border-green-500 text-green-400 bg-green-500/15"
+                          : "border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"}`}
                       style={{ fontFamily: "'Orbitron', monospace" }}>
-                      {copied ? "✓ Copied!" : "Copy"}
+                      {copied ? "✓" : "Copy"}
                     </button>
                   </div>
 
@@ -1796,6 +1975,7 @@ function OrderPage({ setPage }) {
                   </p>
                 </div>
               </div>
+            </div>
 
               {/* Screenshot upload */}
               <div>
@@ -1837,60 +2017,57 @@ function OrderPage({ setPage }) {
 
           {/* ── STEP 4: Done ── */}
           {step === 4 && (
-            <div className="text-center py-6 space-y-6">
-              <div className="text-6xl animate-bounce">🚀</div>
-              <h3 className="text-2xl font-black text-white" style={{ fontFamily: "'Orbitron', monospace" }}>Order Confirmed!</h3>
-              <p className="text-slate-400 leading-relaxed max-w-sm mx-auto text-sm">
-                Your order is placed successfully! Here's exactly what happens next 👇
-              </p>
+            <div className="max-w-md mx-auto">
+              <div className="bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-6 backdrop-blur-xl text-center space-y-5">
+                <div className="text-6xl animate-bounce">🚀</div>
+                <h3 className="text-2xl font-black text-white" style={{ fontFamily: "'Orbitron', monospace" }}>Order Confirmed!</h3>
+                <p className="text-slate-400 text-sm">Your order is placed! Here's exactly what happens next 👇</p>
 
-              {/* What happens next timeline */}
-              <div className="bg-[#050b18] border border-cyan-500/15 rounded-2xl p-6 text-left max-w-sm mx-auto space-y-4">
-                <p className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase mb-4">What Happens Next</p>
-                {[
-                  { time: "Within 30 min", icon: "💬", text: "We verify your payment & confirm on WhatsApp" },
-                  { time: "Within 2 hrs",  icon: "📋", text: "We ask for your requirements & details" },
-                  { time: "On time",       icon: "⚡", text: "We build & deliver to your WhatsApp/Email" },
-                  { time: "After delivery",icon: "✅", text: "Free revision if needed — no questions asked" },
-                ].map((s, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <span className="text-xl flex-shrink-0">{s.icon}</span>
-                    <div>
-                      <p className="text-xs font-mono text-cyan-400 mb-0.5">{s.time}</p>
-                      <p className="text-slate-300 text-sm">{s.text}</p>
+                <div className="bg-[#050b18] border border-cyan-500/15 rounded-2xl p-5 text-left space-y-4">
+                  <p className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase">What Happens Next</p>
+                  {[
+                    { time: "Within 30 min", icon: "💬", text: "We verify your payment & confirm on WhatsApp" },
+                    { time: "Within 2 hrs",  icon: "📋", text: "We ask for your requirements & details" },
+                    { time: "On time",       icon: "⚡", text: "We build & deliver to your WhatsApp/Email" },
+                    { time: "After delivery",icon: "✅", text: "Free revision if needed — no questions asked" },
+                  ].map((s, i) => (
+                    <div key={i} className="flex items-start gap-3">
+                      <span className="text-xl flex-shrink-0">{s.icon}</span>
+                      <div>
+                        <p className="text-xs font-mono text-cyan-400 mb-0.5">{s.time}</p>
+                        <p className="text-slate-300 text-sm">{s.text}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              <div className="bg-amber-500/10 border border-amber-400/20 rounded-xl p-4 max-w-sm mx-auto">
-                <p className="text-amber-300 text-sm font-mono text-center">
-                  📸 <strong>Important:</strong> Please send your payment screenshot on WhatsApp chat now!
-                </p>
-              </div>
+                <div className="bg-amber-500/10 border border-amber-400/20 rounded-xl p-4">
+                  <p className="text-amber-300 text-sm font-mono text-center">
+                    📸 <strong>Important:</strong> Send your payment screenshot on WhatsApp now!
+                  </p>
+                </div>
 
-              <div className="bg-[#050b18] border border-cyan-500/20 rounded-xl p-5 text-left max-w-sm mx-auto space-y-2">
-                <p className="text-xs font-mono text-slate-500 uppercase tracking-widest mb-3">Order Summary</p>
-                <div className="flex justify-between text-sm"><span className="text-slate-400">Name</span><span className="text-white">{form.name}</span></div>
-                <div className="flex justify-between text-sm"><span className="text-slate-400">Service</span><span className="text-cyan-400 text-xs">{SERVICES_CONFIG[service]?.label}</span></div>
-                <div className="flex justify-between text-sm"><span className="text-slate-400">Amount</span><span className="text-green-400 font-bold">₹{amount}</span></div>
-              </div>
+                <div className="bg-[#050b18] border border-cyan-500/20 rounded-xl p-4 text-left space-y-2">
+                  <p className="text-xs font-mono text-slate-500 uppercase tracking-widest mb-2">Order Summary</p>
+                  <div className="flex justify-between text-sm"><span className="text-slate-400">Name</span><span className="text-white">{form.name}</span></div>
+                  <div className="flex justify-between text-sm"><span className="text-slate-400">Service</span><span className="text-cyan-400 text-xs truncate ml-2">{SERVICES_CONFIG[service]?.label}</span></div>
+                  <div className="flex justify-between text-sm"><span className="text-slate-400">Amount</span><span className="text-green-400 font-bold">₹{amount}</span></div>
+                </div>
 
-              <div className="flex gap-3 justify-center flex-wrap">
-                <button onClick={() => setPage("home")}
-                  className="px-8 py-3 rounded-xl border border-cyan-500/30 text-cyan-400 font-mono text-sm hover:bg-cyan-500/10 transition-all cursor-pointer">
-                  ← Back to Home
-                </button>
-                <a href={WA_LINK} target="_blank" rel="noreferrer"
-                  className="px-8 py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-400 text-white font-bold text-sm shadow-lg shadow-green-500/20 hover:-translate-y-0.5 transition-all">
-                  💬 Chat on WhatsApp
-                </a>
+                <div className="flex gap-3 justify-center flex-wrap">
+                  <button onClick={() => setPage("home")}
+                    className="px-6 py-3 rounded-xl border border-cyan-500/30 text-cyan-400 font-mono text-sm hover:bg-cyan-500/10 transition-all cursor-pointer">
+                    ← Home
+                  </button>
+                  <a href={WA_LINK} target="_blank" rel="noreferrer"
+                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-400 text-white font-bold text-sm shadow-lg transition-all">
+                    💬 Chat on WhatsApp
+                  </a>
+                </div>
               </div>
             </div>
           )}
 
-        </div>
-      </div>
     </div>
   );
 }
