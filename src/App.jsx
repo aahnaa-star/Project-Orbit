@@ -865,7 +865,7 @@ const BUNDLES = [
   {
     icon: "🚀", name: "Starter Pack", badge: "Best for Freshers",
     highlight: false,
-    original: "₹999", price: "₹299", amount: 299,
+    original: "₹599", price: "₹299", amount: 299,
     desc: "Everything a fresher needs to start their job hunt.",
     includes: ["Easy Deploy-Ready Project", "Basic Documentation", "GitHub-ready code", "README file", "Delivered in 2 days"],
     color: "from-green-500/10 to-green-900/5", border: "border-green-500/20", badgeCls: "bg-green-500/15 text-green-400 border-green-500/30",
@@ -873,7 +873,7 @@ const BUNDLES = [
   {
     icon: "💼", name: "Job Ready Pack", badge: "⭐ Most Popular",
     highlight: false,
-    original: "₹1,999", price: "₹599", amount: 599,
+    original: "₹1,599", price: "₹599", amount: 599,
     desc: "The complete package most students choose for placements.",
     includes: ["Medium Full-Stack Project", "Pro IEEE Documentation", "ATS Resume (Free)", "Vercel Deployment", "Delivered in 3 days"],
     color: "from-blue-500/15 to-cyan-900/10", border: "border-cyan-400/40", badgeCls: "bg-cyan-500/15 text-cyan-400 border-cyan-400/30",
@@ -881,7 +881,7 @@ const BUNDLES = [
   {
     icon: "👑", name: "Placement Pack", badge: "Maximum Value",
     highlight: false,
-    original: "₹3,999", price: "₹999", amount: 999,
+    original: "₹2,999", price: "₹999", amount: 999,
     desc: "The ultimate bundle for students targeting top companies.",
     includes: ["Pro Portfolio Website", "High-Level Project (AI/ML/DevOps)", "Premium IEEE Docs + PPT", "ATS Resume (Free)", "Delivered in 5–7 days"],
     color: "from-amber-500/10 to-amber-900/5", border: "border-amber-400/25", badgeCls: "bg-amber-500/15 text-amber-400 border-amber-400/30",
