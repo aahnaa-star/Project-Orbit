@@ -1694,181 +1694,185 @@ function OrderPage({ setPage }) {
   };
 
   return (
-    <div className="relative z-10 min-h-screen pt-24 px-4 md:px-12 pb-20">
+    <div className="relative z-10 min-h-screen pt-24 px-4 md:px-10 lg:px-16 pb-20">
       {/* Header */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-6">
         <p className="flex items-center justify-center gap-3 text-cyan-400 font-mono text-xs tracking-widest uppercase mb-3">
           <span className="w-6 h-px bg-cyan-400" />Place Your Order<span className="w-6 h-px bg-cyan-400" />
         </p>
         <h2 className="text-3xl md:text-5xl font-black mb-2" style={{ fontFamily: "'Orbitron', monospace" }}>Order Now</h2>
-        <p className="text-slate-400 max-w-md mx-auto text-xs md:text-sm">Select your service, fill your details, pay via UPI and we'll get started!</p>
+        <p className="text-slate-400 max-w-lg mx-auto text-sm">Select your service · Fill your details · Pay via UPI · We deliver!</p>
       </div>
 
-      <div className="max-w-2xl mx-auto">
+      {/* Progress */}
+      <div className="max-w-xl mx-auto mb-8">
         <Progress />
+      </div>
 
-        <div className="bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-5 md:p-8 backdrop-blur-xl">
+      {/* ── STEP 1: Two column on desktop ── */}
+      {step === 1 && (
+        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left — Service Selection */}
+          <div className="bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-5 md:p-6 backdrop-blur-xl">
+            <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2" style={{ fontFamily: "'Orbitron', monospace" }}>
+              <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-xs font-black flex-shrink-0">1</span>
+              Choose Your Service
+            </h3>
+            <p className="text-xs font-mono text-amber-400/80 tracking-widest uppercase mb-2">🔥 Combo Packs</p>
+            <div className="space-y-2 mb-4">
+              {[
+                { key: "booster",   label: "⚡ Resume Booster Pack", price: "₹699", badge: "🔥 Best Seller" },
+                { key: "starter",   label: "🚀 Starter Pack",         price: "₹299", badge: "Freshers" },
+                { key: "jobready",  label: "💼 Job Ready Pack",        price: "₹499", badge: "⭐ Popular" },
+                { key: "placement", label: "👑 Placement Pack",        price: "₹999", badge: "Max Value" },
+                { key: "portfolio", label: "🌐 Portfolio Pack",        price: "₹399", badge: "Stand Out" },
+              ].map((s) => (
+                <button key={s.key} onClick={() => { setService(s.key); setTier(Object.keys(SERVICES_CONFIG[s.key].tiers)[0]); }}
+                  className={`w-full text-left px-4 py-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-2
+                    ${service === s.key ? "border-cyan-400 bg-cyan-500/10" : "border-cyan-500/20 bg-[#050b18] hover:border-cyan-500/40"}`}>
+                  <span className="font-bold text-sm text-white truncate">{s.label}</span>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <span className="text-xs font-mono text-slate-500 hidden md:block">{s.badge}</span>
+                    <span className="text-cyan-400 font-black text-sm" style={{ fontFamily: "'Orbitron', monospace" }}>{s.price}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+            <p className="text-xs font-mono text-slate-500 tracking-widest uppercase mb-2">⚙️ Individual Services</p>
+            <div className="space-y-2">
+              {[
+                { key: "port_ind", label: "🌐 Portfolio Website" },
+                { key: "proj_ind", label: "🚀 Deploy-Ready Project" },
+                { key: "docs_ind", label: "📄 Interview Docs" },
+              ].map((s) => (
+                <button key={s.key} onClick={() => { setService(s.key); setTier(""); }}
+                  className={`w-full text-left px-4 py-3 rounded-xl border transition-all cursor-pointer
+                    ${service === s.key ? "border-cyan-400 bg-cyan-500/10" : "border-cyan-500/20 bg-[#050b18] hover:border-cyan-500/40"}`}>
+                  <span className="font-bold text-sm text-white">{s.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
 
-          {/* ── STEP 1: Select Service & Tier ── */}
-          {step === 1 && (
-            <div className="space-y-6">
-              <h3 className="text-base font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "'Orbitron', monospace" }}>
-                <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-sm font-black">1</span>
-                Choose Your Service
-              </h3>
+          {/* Right — Tier & Confirm */}
+          <div className="bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-5 md:p-6 backdrop-blur-xl flex flex-col">
+            <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2" style={{ fontFamily: "'Orbitron', monospace" }}>
+              <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-xs font-black flex-shrink-0">2</span>
+              Confirm Your Plan
+            </h3>
 
-              {/* Bundles */}
-              <p className="text-xs font-mono text-amber-400/80 tracking-widest uppercase mb-2">🔥 Combo Packs — Best Value</p>
-              <div className="grid grid-cols-1 gap-3 mb-5">
-                {[
-                  { key: "booster",   label: "⚡ Resume Booster Pack – 3 Projects", price: "₹699", badge: "🔥 Best Seller" },
-                  { key: "starter",   label: "🚀 Starter Pack",   price: "₹299", badge: "Best for Freshers" },
-                  { key: "jobready",  label: "💼 Job Ready Pack",  price: "₹499", badge: "⭐ Most Popular" },
-                  { key: "placement", label: "👑 Placement Pack",  price: "₹999", badge: "Maximum Value" },
-                  { key: "portfolio", label: "🌐 Portfolio Pack",  price: "₹399", badge: "Stand Out Online" },
-                ].map((s) => (
-                  <button key={s.key} onClick={() => { setService(s.key); setTier(Object.keys(SERVICES_CONFIG[s.key].tiers)[0]); }}
-                    className={`w-full text-left px-5 py-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between
-                      ${service === s.key ? "border-cyan-400 bg-cyan-500/10" : "border-cyan-500/20 bg-[#050b18] hover:border-cyan-500/40"}`}>
-                    <span className="font-bold text-sm text-white">{s.label}</span>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs font-mono text-slate-500 hidden sm:block">{s.badge}</span>
-                      <span className="text-cyan-400 font-black text-sm" style={{ fontFamily: "'Orbitron', monospace" }}>{s.price}</span>
-                    </div>
-                  </button>
-                ))}
+            {!service && (
+              <div className="flex-1 flex items-center justify-center py-16">
+                <div className="text-center">
+                  <div className="text-4xl mb-3">👈</div>
+                  <p className="text-slate-500 text-sm font-mono">Select a service first</p>
+                </div>
               </div>
+            )}
 
-              {/* Individual add-ons */}
-              <p className="text-xs font-mono text-slate-500 tracking-widest uppercase mb-2">⚙️ Individual Services</p>
-              <div className="grid grid-cols-1 gap-3">
-                {[
-                  { key: "port_ind",  label: "🌐 Portfolio Website" },
-                  { key: "proj_ind",  label: "🚀 Deploy-Ready Project" },
-                  { key: "docs_ind",  label: "📄 Interview Docs" },
-                ].map((s) => (
-                  <button key={s.key} onClick={() => { setService(s.key); setTier(""); }}
-                    className={`w-full text-left px-5 py-3.5 rounded-xl border transition-all cursor-pointer
-                      ${service === s.key ? "border-cyan-400 bg-cyan-500/10" : "border-cyan-500/20 bg-[#050b18] hover:border-cyan-500/40"}`}>
-                    <span className="font-bold text-sm text-white">{s.label}</span>
-                  </button>
-                ))}
+            {service && Object.keys(SERVICES_CONFIG[service].tiers).length > 1 && (
+              <div className="mb-4">
+                <p className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase mb-3">Select Tier</p>
+                <div className="grid grid-cols-3 gap-3">
+                  {Object.entries(SERVICES_CONFIG[service].tiers).map(([t, price]) => (
+                    <button key={t} onClick={() => setTier(t)}
+                      className={`py-4 rounded-xl border text-center transition-all cursor-pointer
+                        ${tier === t ? "border-cyan-400 bg-cyan-500/10" : "border-cyan-500/20 bg-[#050b18] hover:border-cyan-500/40"}`}>
+                      <div className="font-bold text-sm text-white" style={{ fontFamily: "'Orbitron', monospace" }}>{t}</div>
+                      <div className="text-cyan-400 font-black text-lg mt-1" style={{ fontFamily: "'Orbitron', monospace" }}>₹{price}</div>
+                      {tier === t && <div className="text-xs text-green-400 font-mono mt-1">✓</div>}
+                    </button>
+                  ))}
+                </div>
               </div>
+            )}
 
-              {/* Tier select — only for individual services */}
-              {service && Object.keys(SERVICES_CONFIG[service].tiers).length > 1 && (
-                <div className="bg-[#050b18] border border-cyan-500/15 rounded-2xl p-5">
-                  <p className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase mb-3">
-                    👇 Select Your Tier
-                  </p>
-                  <div className="grid grid-cols-3 gap-3">
-                    {Object.entries(SERVICES_CONFIG[service].tiers).map(([t, price]) => (
-                      <button key={t} onClick={() => setTier(t)}
-                        className={`py-4 rounded-xl border text-center transition-all cursor-pointer
-                          ${tier === t
-                            ? "border-cyan-400 bg-cyan-500/10 shadow-lg shadow-cyan-500/10"
-                            : "border-cyan-500/20 bg-[#050b18] hover:border-cyan-500/40"}`}>
-                        <div className="font-bold text-sm text-white" style={{ fontFamily: "'Orbitron', monospace" }}>{t}</div>
-                        <div className="text-cyan-400 font-black text-lg mt-1" style={{ fontFamily: "'Orbitron', monospace" }}>₹{price}</div>
-                        {tier === t && <div className="text-xs text-green-400 font-mono mt-1">✓ Selected</div>}
-                      </button>
-                    ))}
-                  </div>
+            {service && Object.keys(SERVICES_CONFIG[service].tiers).length === 1 && (
+              <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 flex items-center gap-3 mb-4">
+                <span className="text-green-400 text-2xl">✓</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-green-400 text-sm font-bold">Pack Selected!</p>
+                  <p className="text-slate-400 text-xs font-mono mt-0.5 truncate">{SERVICES_CONFIG[service].label}</p>
                 </div>
-              )}
+                <span className="text-2xl font-black text-cyan-400 flex-shrink-0" style={{ fontFamily: "'Orbitron', monospace" }}>
+                  ₹{Object.values(SERVICES_CONFIG[service].tiers)[0]}
+                </span>
+              </div>
+            )}
 
-              {/* Bundle auto-selected confirmation */}
-              {service && Object.keys(SERVICES_CONFIG[service].tiers).length === 1 && (
-                <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 flex items-center gap-3">
-                  <span className="text-green-400 text-xl">✓</span>
-                  <div>
-                    <p className="text-green-400 text-sm font-bold">Pack Selected!</p>
-                    <p className="text-slate-400 text-xs font-mono mt-0.5">{SERVICES_CONFIG[service].label}</p>
-                  </div>
-                  <span className="ml-auto text-2xl font-black text-cyan-400" style={{ fontFamily: "'Orbitron', monospace" }}>
-                    ₹{Object.values(SERVICES_CONFIG[service].tiers)[0]}
-                  </span>
+            {canProceedStep1 && Object.keys(SERVICES_CONFIG[service].tiers).length > 1 && (
+              <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-center justify-between mb-4">
+                <div className="min-w-0 flex-1 pr-3">
+                  <p className="text-xs text-slate-400 font-mono">Selected</p>
+                  <p className="text-white font-bold text-sm truncate">{SERVICES_CONFIG[service].label} — {tier}</p>
                 </div>
-              )}
+                <span className="text-2xl font-black text-cyan-400 flex-shrink-0" style={{ fontFamily: "'Orbitron', monospace" }}>₹{amount}</span>
+              </div>
+            )}
 
-              {/* Tier selected summary — only for individual services */}
-              {canProceedStep1 && Object.keys(SERVICES_CONFIG[service].tiers).length > 1 && (
-                <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-slate-400 font-mono">Selected</p>
-                    <p className="text-white font-bold text-sm">{SERVICES_CONFIG[service].label} — {tier}</p>
-                  </div>
-                  <span className="text-2xl font-black text-cyan-400" style={{ fontFamily: "'Orbitron', monospace" }}>₹{amount}</span>
-                </div>
-              )}
-
+            <div className="mt-auto pt-4">
               <button onClick={() => setStep(2)} disabled={!canProceedStep1}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-sm shadow-lg shadow-cyan-500/20 hover:-translate-y-0.5 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                className="w-full py-4 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-sm shadow-lg shadow-cyan-500/20 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                 style={{ fontFamily: "'Orbitron', monospace" }}>
                 Continue →
               </button>
             </div>
-          )}
+          </div>
+        </div>
+      )}
 
-          {/* ── STEP 2: Details Form ── */}
-          {step === 2 && (
-            <div className="space-y-5">
-              <h3 className="text-base font-bold text-white mb-6 flex items-center gap-3" style={{ fontFamily: "'Orbitron', monospace" }}>
-                <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-sm font-black">2</span>
-                Your Details
-              </h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { label: "Full Name *", key: "name", placeholder: "Your Full Name" },
-                  { label: "Email *", key: "email", placeholder: "you@example.com", type: "email" },
-                  { label: "Phone *", key: "phone", placeholder: "+91 XXXXX XXXXX" },
-                ].map((f) => (
-                  <div key={f.key}>
-                    <label className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase mb-1.5 block">{f.label}</label>
-                    <input type={f.type || "text"} value={form[f.key]}
-                      onChange={(e) => setForm((d) => ({ ...d, [f.key]: e.target.value }))}
-                      placeholder={f.placeholder}
-                      className="w-full bg-[#050b18] border border-cyan-500/20 rounded-xl px-4 py-3 text-slate-200 text-sm placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-all" />
-                  </div>
-                ))}
+      {/* ── STEP 2: Details ── */}
+      {step === 2 && (
+        <div className="max-w-2xl mx-auto bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-5 md:p-8 backdrop-blur-xl">
+          <h3 className="text-sm font-bold text-white mb-5 flex items-center gap-2" style={{ fontFamily: "'Orbitron', monospace" }}>
+            <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-xs font-black flex-shrink-0">2</span>
+            Your Details
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            {[
+              { label: "Full Name *", key: "name", placeholder: "Your Full Name" },
+              { label: "Email *", key: "email", placeholder: "you@example.com", type: "email" },
+              { label: "Phone *", key: "phone", placeholder: "+91 XXXXX XXXXX" },
+            ].map((f) => (
+              <div key={f.key}>
+                <label className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase mb-1.5 block">{f.label}</label>
+                <input type={f.type || "text"} value={form[f.key]}
+                  onChange={(e) => setForm((d) => ({ ...d, [f.key]: e.target.value }))}
+                  placeholder={f.placeholder}
+                  className="w-full bg-[#050b18] border border-cyan-500/20 rounded-xl px-4 py-3 text-slate-200 text-sm placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-all" />
               </div>
+            ))}
+          </div>
+          <div className="mb-4">
+            <label className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase mb-1.5 block">Your Requirement *</label>
+            <textarea rows={4} value={form.requirement}
+              onChange={(e) => setForm((d) => ({ ...d, requirement: e.target.value }))}
+              placeholder="Describe what you need — tech stack, project idea, domain, specific requirements..."
+              className="w-full bg-[#050b18] border border-cyan-500/20 rounded-xl px-4 py-3 text-slate-200 text-sm placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-all resize-none" />
+          </div>
+          <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-center justify-between mb-5">
+            <p className="text-slate-300 text-sm truncate pr-2">{SERVICES_CONFIG[service]?.label}</p>
+            <span className="text-xl font-black text-cyan-400 flex-shrink-0" style={{ fontFamily: "'Orbitron', monospace" }}>₹{amount}</span>
+          </div>
+          <div className="flex gap-3">
+            <button onClick={() => setStep(1)} className="px-5 py-3 rounded-xl border border-cyan-500/20 text-slate-400 text-sm font-mono hover:border-cyan-400 hover:text-cyan-400 transition-all cursor-pointer flex-shrink-0">← Back</button>
+            <button onClick={() => setStep(3)} disabled={!canProceedStep2}
+              className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-sm shadow-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+              style={{ fontFamily: "'Orbitron', monospace" }}>
+              Proceed to Payment →
+            </button>
+          </div>
+        </div>
+      )}
 
-              <div>
-                <label className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase mb-1.5 block">Your Requirement *</label>
-                <textarea rows={4} value={form.requirement}
-                  onChange={(e) => setForm((d) => ({ ...d, requirement: e.target.value }))}
-                  placeholder="Describe what you need — e.g. tech stack, project idea, domain, any specific requirements..."
-                  className="w-full bg-[#050b18] border border-cyan-500/20 rounded-xl px-4 py-3 text-slate-200 text-sm placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-all resize-none" />
-              </div>
-
-              {/* Order summary */}
-              <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-center justify-between">
-                <p className="text-slate-300 text-sm">{SERVICES_CONFIG[service].label} — <span className="text-cyan-400">{tier}</span></p>
-                <span className="text-xl font-black text-cyan-400" style={{ fontFamily: "'Orbitron', monospace" }}>₹{amount}</span>
-              </div>
-
-              <div className="flex gap-3">
-                <button onClick={() => setStep(1)}
-                  className="px-6 py-3 rounded-xl border border-cyan-500/20 text-slate-400 text-sm font-mono hover:border-cyan-400 hover:text-cyan-400 transition-all cursor-pointer">
-                  ← Back
-                </button>
-                <button onClick={() => setStep(3)} disabled={!canProceedStep2}
-                  className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-sm shadow-lg shadow-cyan-500/20 hover:-translate-y-0.5 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-                  style={{ fontFamily: "'Orbitron', monospace" }}>
-                  Proceed to Payment →
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* ── STEP 3: UPI Payment ── */}
-          {step === 3 && (
-            <div className="space-y-6">
-              <h3 className="text-base font-bold text-white mb-2 flex items-center gap-3" style={{ fontFamily: "'Orbitron', monospace" }}>
-                <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-sm font-black">3</span>
-                Pay via UPI
-              </h3>
+      {/* ── STEP 3: Payment ── */}
+      {step === 3 && (
+        <div className="max-w-md mx-auto space-y-4">
+          <div className="bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-5 backdrop-blur-xl">
+            <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2" style={{ fontFamily: "'Orbitron', monospace" }}>
+              <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-xs font-black flex-shrink-0">3</span>
+              Pay via UPI
+            </h3>
 
               {/* ── Creative Payment Card ── */}
               <div className="relative rounded-3xl p-px overflow-hidden"
@@ -2012,60 +2016,57 @@ function OrderPage({ setPage }) {
 
           {/* ── STEP 4: Done ── */}
           {step === 4 && (
-            <div className="text-center py-6 space-y-6">
-              <div className="text-6xl animate-bounce">🚀</div>
-              <h3 className="text-2xl font-black text-white" style={{ fontFamily: "'Orbitron', monospace" }}>Order Confirmed!</h3>
-              <p className="text-slate-400 leading-relaxed max-w-sm mx-auto text-sm">
-                Your order is placed successfully! Here's exactly what happens next 👇
-              </p>
+            <div className="max-w-md mx-auto">
+              <div className="bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-6 backdrop-blur-xl text-center space-y-5">
+                <div className="text-6xl animate-bounce">🚀</div>
+                <h3 className="text-2xl font-black text-white" style={{ fontFamily: "'Orbitron', monospace" }}>Order Confirmed!</h3>
+                <p className="text-slate-400 text-sm">Your order is placed! Here's exactly what happens next 👇</p>
 
-              {/* What happens next timeline */}
-              <div className="bg-[#050b18] border border-cyan-500/15 rounded-2xl p-6 text-left max-w-sm mx-auto space-y-4">
-                <p className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase mb-4">What Happens Next</p>
-                {[
-                  { time: "Within 30 min", icon: "💬", text: "We verify your payment & confirm on WhatsApp" },
-                  { time: "Within 2 hrs",  icon: "📋", text: "We ask for your requirements & details" },
-                  { time: "On time",       icon: "⚡", text: "We build & deliver to your WhatsApp/Email" },
-                  { time: "After delivery",icon: "✅", text: "Free revision if needed — no questions asked" },
-                ].map((s, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <span className="text-xl flex-shrink-0">{s.icon}</span>
-                    <div>
-                      <p className="text-xs font-mono text-cyan-400 mb-0.5">{s.time}</p>
-                      <p className="text-slate-300 text-sm">{s.text}</p>
+                <div className="bg-[#050b18] border border-cyan-500/15 rounded-2xl p-5 text-left space-y-4">
+                  <p className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase">What Happens Next</p>
+                  {[
+                    { time: "Within 30 min", icon: "💬", text: "We verify your payment & confirm on WhatsApp" },
+                    { time: "Within 2 hrs",  icon: "📋", text: "We ask for your requirements & details" },
+                    { time: "On time",       icon: "⚡", text: "We build & deliver to your WhatsApp/Email" },
+                    { time: "After delivery",icon: "✅", text: "Free revision if needed — no questions asked" },
+                  ].map((s, i) => (
+                    <div key={i} className="flex items-start gap-3">
+                      <span className="text-xl flex-shrink-0">{s.icon}</span>
+                      <div>
+                        <p className="text-xs font-mono text-cyan-400 mb-0.5">{s.time}</p>
+                        <p className="text-slate-300 text-sm">{s.text}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              <div className="bg-amber-500/10 border border-amber-400/20 rounded-xl p-4 max-w-sm mx-auto">
-                <p className="text-amber-300 text-sm font-mono text-center">
-                  📸 <strong>Important:</strong> Please send your payment screenshot on WhatsApp chat now!
-                </p>
-              </div>
+                <div className="bg-amber-500/10 border border-amber-400/20 rounded-xl p-4">
+                  <p className="text-amber-300 text-sm font-mono text-center">
+                    📸 <strong>Important:</strong> Send your payment screenshot on WhatsApp now!
+                  </p>
+                </div>
 
-              <div className="bg-[#050b18] border border-cyan-500/20 rounded-xl p-5 text-left max-w-sm mx-auto space-y-2">
-                <p className="text-xs font-mono text-slate-500 uppercase tracking-widest mb-3">Order Summary</p>
-                <div className="flex justify-between text-sm"><span className="text-slate-400">Name</span><span className="text-white">{form.name}</span></div>
-                <div className="flex justify-between text-sm"><span className="text-slate-400">Service</span><span className="text-cyan-400 text-xs">{SERVICES_CONFIG[service]?.label}</span></div>
-                <div className="flex justify-between text-sm"><span className="text-slate-400">Amount</span><span className="text-green-400 font-bold">₹{amount}</span></div>
-              </div>
+                <div className="bg-[#050b18] border border-cyan-500/20 rounded-xl p-4 text-left space-y-2">
+                  <p className="text-xs font-mono text-slate-500 uppercase tracking-widest mb-2">Order Summary</p>
+                  <div className="flex justify-between text-sm"><span className="text-slate-400">Name</span><span className="text-white">{form.name}</span></div>
+                  <div className="flex justify-between text-sm"><span className="text-slate-400">Service</span><span className="text-cyan-400 text-xs truncate ml-2">{SERVICES_CONFIG[service]?.label}</span></div>
+                  <div className="flex justify-between text-sm"><span className="text-slate-400">Amount</span><span className="text-green-400 font-bold">₹{amount}</span></div>
+                </div>
 
-              <div className="flex gap-3 justify-center flex-wrap">
-                <button onClick={() => setPage("home")}
-                  className="px-8 py-3 rounded-xl border border-cyan-500/30 text-cyan-400 font-mono text-sm hover:bg-cyan-500/10 transition-all cursor-pointer">
-                  ← Back to Home
-                </button>
-                <a href={WA_LINK} target="_blank" rel="noreferrer"
-                  className="px-8 py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-400 text-white font-bold text-sm shadow-lg shadow-green-500/20 hover:-translate-y-0.5 transition-all">
-                  💬 Chat on WhatsApp
-                </a>
+                <div className="flex gap-3 justify-center flex-wrap">
+                  <button onClick={() => setPage("home")}
+                    className="px-6 py-3 rounded-xl border border-cyan-500/30 text-cyan-400 font-mono text-sm hover:bg-cyan-500/10 transition-all cursor-pointer">
+                    ← Home
+                  </button>
+                  <a href={WA_LINK} target="_blank" rel="noreferrer"
+                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-400 text-white font-bold text-sm shadow-lg transition-all">
+                    💬 Chat on WhatsApp
+                  </a>
+                </div>
               </div>
             </div>
           )}
 
-        </div>
-      </div>
     </div>
   );
 }
