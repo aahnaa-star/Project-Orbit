@@ -898,7 +898,7 @@ const BUNDLES = [
 
 const ADDONS = [
   { icon: "🌐", name: "Portfolio Website", tiers: [{ t: "Basic", p: "₹199", a: 199 }, { t: "Pro", p: "₹399", a: 399 }, { t: "Premium", p: "₹999", a: 999 }] },
-  { icon: "🚀", name: "Deploy-Ready Project", tiers: [{ t: "Easy", p: "₹99", a: 99 }, { t: "Medium", p: "₹249", a: 249 }, { t: "High", p: "₹499", a: 499 }] },
+  { icon: "🚀", name: "Deploy-Ready Project", tiers: [{ t: "Easy", p: "₹199", a: 199 }, { t: "Medium", p: "₹299", a: 299 }, { t: "High", p: "₹499", a: 499 }] },
   { icon: "📄", name: "Interview Docs", tiers: [{ t: "Basic", p: "₹99", a: 99 }, { t: "Pro", p: "₹199", a: 199 }, { t: "Premium", p: "₹349", a: 349 }] },
 ];
 
@@ -1716,11 +1716,11 @@ function OrderPage({ setPage }) {
             <p className="text-xs font-mono text-amber-400/80 tracking-widest uppercase mb-2">🔥 Combo Packs</p>
             <div className="space-y-2 mb-4">
               {[
-                { key: "booster",   label: "⚡ Resume Booster Pack", price: "₹699", badge: "🔥 Best Seller" },
+                { key: "booster",   label: "⚡ Resume Booster Pack", price: "₹799", badge: "🔥 Best Seller" },
                 { key: "starter",   label: "🚀 Starter Pack",         price: "₹299", badge: "Freshers" },
-                { key: "jobready",  label: "💼 Job Ready Pack",        price: "₹499", badge: "⭐ Popular" },
+                { key: "jobready",  label: "💼 Job Ready Pack",        price: "₹599", badge: "⭐ Popular" },
                 { key: "placement", label: "👑 Placement Pack",        price: "₹999", badge: "Max Value" },
-                { key: "portfolio", label: "🌐 Portfolio Pack",        price: "₹399", badge: "Stand Out" },
+                { key: "portfolio", label: "🌐 Portfolio Pack",        price: "₹499", badge: "Stand Out" },
               ].map((s) => (
                 <button key={s.key} onClick={() => { setService(s.key); setTier(Object.keys(SERVICES_CONFIG[s.key].tiers)[0]); }}
                   className={`w-full text-left px-4 py-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-2
