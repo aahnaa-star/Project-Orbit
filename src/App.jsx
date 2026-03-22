@@ -7,55 +7,122 @@ function CustomCursor() {
   const mouse   = useRef({ x: 0, y: 0 });
   const ring    = useRef({ x: 0, y: 0 });
   const raf     = useRef();
+  const isTouchDevice = useRef(false);
 
   useEffect(() => {
-    // Hide default cursor on the whole page
-    document.body.style.cursor = "none";
+    isTouchDevice.current = window.matchMedia("(hover: none)").matches;
 
-    const onMove = (e) => {
-      mouse.current = { x: e.clientX, y: e.clientY };
-      if (dotRef.current) {
-        dotRef.current.style.left = e.clientX + "px";
-        dotRef.current.style.top  = e.clientY + "px";
-      }
-    };
+    // ── DESKTOP CURSOR ──────────────────────────────────────────
+    if (!isTouchDevice.current) {
+      document.body.style.cursor = "none";
 
-    const animate = () => {
-      ring.current.x += (mouse.current.x - ring.current.x) * 0.12;
-      ring.current.y += (mouse.current.y - ring.current.y) * 0.12;
-      if (ringRef.current) {
-        ringRef.current.style.left = ring.current.x + "px";
-        ringRef.current.style.top  = ring.current.y + "px";
-      }
+      const onMove = (e) => {
+        mouse.current = { x: e.clientX, y: e.clientY };
+        if (dotRef.current) {
+          dotRef.current.style.left = e.clientX + "px";
+          dotRef.current.style.top  = e.clientY + "px";
+          dotRef.current.style.opacity = "1";
+        }
+      };
+
+      const animate = () => {
+        ring.current.x += (mouse.current.x - ring.current.x) * 0.12;
+        ring.current.y += (mouse.current.y - ring.current.y) * 0.12;
+        if (ringRef.current) {
+          ringRef.current.style.left = ring.current.x + "px";
+          ringRef.current.style.top  = ring.current.y + "px";
+        }
+        raf.current = requestAnimationFrame(animate);
+      };
+
+      const onEnter = () => {
+        if (dotRef.current)  { dotRef.current.style.width  = "20px"; dotRef.current.style.height  = "20px"; }
+        if (ringRef.current) { ringRef.current.style.width = "56px"; ringRef.current.style.height = "56px"; }
+      };
+      const onLeave = () => {
+        if (dotRef.current)  { dotRef.current.style.width  = "12px"; dotRef.current.style.height  = "12px"; }
+        if (ringRef.current) { ringRef.current.style.width = "36px"; ringRef.current.style.height = "36px"; }
+      };
+
+      document.addEventListener("mousemove", onMove);
+      document.querySelectorAll("a, button").forEach((el) => {
+        el.addEventListener("mouseenter", onEnter);
+        el.addEventListener("mouseleave", onLeave);
+      });
       raf.current = requestAnimationFrame(animate);
+
+      return () => {
+        document.body.style.cursor = "";
+        document.removeEventListener("mousemove", onMove);
+        cancelAnimationFrame(raf.current);
+      };
+    }
+
+    // ── MOBILE TOUCH RIPPLE ─────────────────────────────────────
+    const createRipple = (x, y) => {
+      const ripple = document.createElement("div");
+      ripple.style.cssText = `
+        position: fixed;
+        left: ${x}px;
+        top: ${y}px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(0, 212, 255, 0.6);
+        box-shadow: 0 0 12px #00d4ff, 0 0 30px rgba(0,212,255,0.4);
+        transform: translate(-50%, -50%) scale(1);
+        pointer-events: none;
+        z-index: 9999;
+        transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+      `;
+      document.body.appendChild(ripple);
+
+      // Outer ring
+      const ring = document.createElement("div");
+      ring.style.cssText = `
+        position: fixed;
+        left: ${x}px;
+        top: ${y}px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(0, 212, 255, 0.8);
+        transform: translate(-50%, -50%) scale(1);
+        pointer-events: none;
+        z-index: 9998;
+        transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+      `;
+      document.body.appendChild(ring);
+
+      requestAnimationFrame(() => {
+        ripple.style.transform = "translate(-50%, -50%) scale(4)";
+        ripple.style.opacity = "0";
+        ring.style.transform = "translate(-50%, -50%) scale(6)";
+        ring.style.opacity = "0";
+      });
+
+      setTimeout(() => {
+        ripple.remove();
+        ring.remove();
+      }, 600);
     };
 
-    const onEnter = () => {
-      if (dotRef.current)  { dotRef.current.style.width  = "20px"; dotRef.current.style.height  = "20px"; }
-      if (ringRef.current) { ringRef.current.style.width = "56px"; ringRef.current.style.height = "56px"; }
-    };
-    const onLeave = () => {
-      if (dotRef.current)  { dotRef.current.style.width  = "12px"; dotRef.current.style.height  = "12px"; }
-      if (ringRef.current) { ringRef.current.style.width = "36px"; ringRef.current.style.height = "36px"; }
+    const onTouch = (e) => {
+      const touch = e.touches[0] || e.changedTouches[0];
+      if (touch) createRipple(touch.clientX, touch.clientY);
     };
 
-    document.addEventListener("mousemove", onMove);
-    document.querySelectorAll("a, button").forEach((el) => {
-      el.addEventListener("mouseenter", onEnter);
-      el.addEventListener("mouseleave", onLeave);
-    });
-    raf.current = requestAnimationFrame(animate);
-
-    return () => {
-      document.body.style.cursor = "";
-      document.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf.current);
-    };
+    document.addEventListener("touchstart", onTouch, { passive: true });
+    return () => document.removeEventListener("touchstart", onTouch);
   }, []);
+
+  // Don't render cursor divs on touch devices
+  if (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches) {
+    return null;
+  }
 
   return (
     <>
-      {/* Dot */}
       <div ref={dotRef} style={{
         position: "fixed", pointerEvents: "none", zIndex: 9999,
         width: 12, height: 12, borderRadius: "50%",
@@ -63,8 +130,8 @@ function CustomCursor() {
         transform: "translate(-50%, -50%)",
         transition: "width 0.2s, height 0.2s",
         boxShadow: "0 0 10px #00d4ff, 0 0 30px rgba(0,212,255,0.5)",
+        opacity: 0,
       }} />
-      {/* Ring */}
       <div ref={ringRef} style={{
         position: "fixed", pointerEvents: "none", zIndex: 9998,
         width: 36, height: 36, borderRadius: "50%",
@@ -347,38 +414,38 @@ function Nav({ page, setPage }) {
 // ─── HERO ─────────────────────────────────────────────────────────────────────
 function Hero({ setPage }) {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-28 pb-20 overflow-hidden">
+    <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-5 pt-24 pb-16 overflow-hidden">
       <OrbitRings />
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-[600px] h-[400px] bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="w-[400px] md:w-[600px] h-[300px] md:h-[400px] bg-blue-500/10 rounded-full blur-3xl" />
       </div>
 
       {/* Badge */}
-      <div className="relative z-10 flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 rounded-full px-5 py-2 mb-10 animate-fade-down">
-        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-lg shadow-cyan-400" />
-        <span className="font-mono text-cyan-400 text-xs tracking-widest">Now Onboarding Students — Batch 2025</span>
+      <div className="relative z-10 flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 rounded-full px-4 py-2 mb-8 animate-fade-down">
+        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-lg shadow-cyan-400 flex-shrink-0" />
+        <span className="font-mono text-cyan-400 text-xs tracking-wide">Now Onboarding Students — Batch 2025</span>
       </div>
 
       {/* Headline */}
-      <h1 className="relative z-10 text-5xl md:text-7xl font-black leading-tight mb-6" style={{ fontFamily: "'Orbitron', monospace" }}>
+      <h1 className="relative z-10 text-4xl sm:text-5xl md:text-7xl font-black leading-tight mb-5" style={{ fontFamily: "'Orbitron', monospace" }}>
         <span className="block text-white">Launch Your</span>
         <span className="block bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent bg-[length:200%] animate-shimmer">
           Tech Career into Orbit
         </span>
       </h1>
 
-      <p className="relative z-10 max-w-xl text-slate-400 text-lg leading-relaxed mb-12">
+      <p className="relative z-10 max-w-lg text-slate-400 text-sm md:text-lg leading-relaxed mb-10 px-2">
         We help B.Tech students build stunning portfolios, access deploy-ready projects, create interview-winning documentation, and generate ATS-optimized resumes — everything you need to land your dream role.
       </p>
 
-      <div className="relative z-10 flex gap-4 flex-wrap justify-center">
+      <div className="relative z-10 flex flex-col sm:flex-row gap-3 w-full max-w-sm sm:max-w-none sm:justify-center px-2">
         <button onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })}
-          className="px-10 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-sm shadow-2xl shadow-cyan-500/40 hover:shadow-cyan-500/70 hover:-translate-y-1 transition-all"
+          className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-xs shadow-2xl shadow-cyan-500/40 transition-all cursor-pointer"
           style={{ fontFamily: "'Orbitron', monospace" }}>
           Explore Services
         </button>
         <button onClick={() => setPage("resume")}
-          className="px-10 py-4 rounded-xl border border-cyan-500/30 text-cyan-400 font-bold tracking-widest uppercase text-sm hover:bg-cyan-500/10 hover:border-cyan-400 hover:-translate-y-1 transition-all"
+          className="w-full sm:w-auto px-8 py-4 rounded-xl border border-cyan-500/30 text-cyan-400 font-bold tracking-widest uppercase text-xs hover:bg-cyan-500/10 transition-all cursor-pointer"
           style={{ fontFamily: "'Orbitron', monospace" }}>
           Build Resume ✨
         </button>
@@ -405,11 +472,12 @@ function Stats() {
     { num: "4",    label: "Service Verticals" },
   ];
   return (
-    <div className="relative z-10 flex flex-wrap justify-center gap-0 px-6 mb-28 reveal">
+    <div className="relative z-10 grid grid-cols-2 md:flex md:flex-row justify-center gap-4 md:gap-0 px-6 mb-20 reveal max-w-2xl mx-auto">
       {items.map((s, i) => (
-        <div key={i} className={`flex flex-col items-center px-12 py-10 border border-cyan-500/15 bg-[#0a1428]/70 backdrop-blur-xl ${i === 0 ? "rounded-l-2xl" : ""} ${i === items.length - 1 ? "rounded-r-2xl" : ""} ${i > 0 ? "border-l-0" : ""}`}>
-          <span className="font-black text-3xl bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent" style={{ fontFamily: "'Orbitron', monospace" }}>{s.num}</span>
-          <span className="text-slate-500 text-xs tracking-widest uppercase mt-1">{s.label}</span>
+        <div key={i} className="flex flex-col items-center px-6 py-8 md:px-12 md:py-10 border border-cyan-500/15 bg-[#0a1428]/70 backdrop-blur-xl rounded-2xl md:rounded-none
+          md:first:rounded-l-2xl md:last:rounded-r-2xl">
+          <span className="font-black text-2xl md:text-3xl bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent" style={{ fontFamily: "'Orbitron', monospace" }}>{s.num}</span>
+          <span className="text-slate-500 text-xs tracking-widest uppercase mt-1 text-center">{s.label}</span>
         </div>
       ))}
     </div>
@@ -747,34 +815,34 @@ function FAQ() {
 // ─── CTA ──────────────────────────────────────────────────────────────────────
 function CTA({ setPage }) {
   return (
-    <section id="contact" className="relative z-10 px-6 md:px-16 pb-32">
-      <div className="reveal max-w-3xl mx-auto bg-[#0a1428]/80 border border-cyan-500/20 rounded-3xl p-16 text-center relative overflow-hidden backdrop-blur-2xl">
+    <section id="contact" className="relative z-10 px-4 md:px-16 pb-20">
+      <div className="reveal max-w-3xl mx-auto bg-[#0a1428]/80 border border-cyan-500/20 rounded-2xl p-8 md:p-16 text-center relative overflow-hidden backdrop-blur-2xl">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-40 bg-blue-500/15 blur-3xl rounded-full pointer-events-none" />
-        <p className="flex items-center justify-center gap-3 text-cyan-400 font-mono text-xs tracking-widest uppercase mb-5">
-          <span className="w-8 h-px bg-cyan-400" />Ready to Launch?<span className="w-8 h-px bg-cyan-400" />
+        <p className="flex items-center justify-center gap-3 text-cyan-400 font-mono text-xs tracking-widest uppercase mb-4">
+          <span className="w-6 h-px bg-cyan-400" />Ready to Launch?<span className="w-6 h-px bg-cyan-400" />
         </p>
-        <h2 className="text-4xl md:text-5xl font-black mb-4 leading-tight" style={{ fontFamily: "'Orbitron', monospace" }}>
+        <h2 className="text-3xl md:text-5xl font-black mb-4 leading-tight" style={{ fontFamily: "'Orbitron', monospace" }}>
           Your career starts<br />
           <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">here and now.</span>
         </h2>
-        <p className="text-slate-400 text-base mb-10 max-w-lg mx-auto leading-relaxed">
+        <p className="text-slate-400 text-sm md:text-base mb-8 max-w-lg mx-auto leading-relaxed">
           Join hundreds of B.Tech students who've used Aahnaa Technologies to break into the tech industry with confidence.
         </p>
-        <div className="flex gap-4 justify-center flex-wrap">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
           <a href={`mailto:${MAIL}`}
-            className="px-10 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-sm shadow-xl shadow-cyan-500/30 hover:shadow-cyan-500/60 hover:-translate-y-1 transition-all"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-xs shadow-xl shadow-cyan-500/30 transition-all text-center"
             style={{ fontFamily: "'Orbitron', monospace" }}>
             Email Us
           </a>
           <a href={WA_LINK} target="_blank" rel="noreferrer"
-            className="px-10 py-4 rounded-xl border border-cyan-500/30 text-cyan-400 font-bold tracking-widest uppercase text-sm hover:bg-cyan-500/10 hover:border-cyan-400 hover:-translate-y-1 transition-all"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl border border-cyan-500/30 text-cyan-400 font-bold tracking-widest uppercase text-xs hover:bg-cyan-500/10 transition-all text-center"
             style={{ fontFamily: "'Orbitron', monospace" }}>
             WhatsApp Us
           </a>
           <button onClick={() => setPage("resume")}
-            className="px-10 py-4 rounded-xl border border-blue-500/30 text-blue-400 font-bold tracking-widest uppercase text-sm hover:bg-blue-500/10 hover:border-blue-400 hover:-translate-y-1 transition-all"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl border border-blue-500/30 text-blue-400 font-bold tracking-widest uppercase text-xs hover:bg-blue-500/10 transition-all cursor-pointer"
             style={{ fontFamily: "'Orbitron', monospace" }}>
-            Build My Resume ✨
+            Build Resume ✨
           </button>
         </div>
       </div>
@@ -1048,17 +1116,17 @@ function Pricing({ setPage }) {
 // ─── FOOTER ───────────────────────────────────────────────────────────────────
 function Footer({ setPage }) {
   return (
-    <footer className="relative z-10 border-t border-cyan-500/10 px-6 md:px-16 py-10 flex flex-col md:flex-row items-center justify-between gap-6" style={{ backgroundColor: "#050b18" }}>
+    <footer className="relative z-10 border-t border-cyan-500/10 px-6 md:px-16 py-10 flex flex-col items-center gap-6" style={{ backgroundColor: "#050b18" }}>
       <button onClick={() => setPage("home")} className="font-bold tracking-widest text-sm cursor-pointer" style={{ fontFamily: "'Orbitron', monospace" }}>
         Aahnaa <span className="text-cyan-400">Technologies</span>
       </button>
-      <p className="text-slate-500 text-xs font-mono">© 2025 Aahnaa Technologies. All rights reserved.</p>
-      <div className="flex gap-6">
+      <div className="flex flex-wrap justify-center gap-4">
         {["Services", "Projects", "Pricing", "FAQ", "Contact"].map((l) => (
           <a key={l} href={`#${l.toLowerCase()}`} className="text-slate-500 hover:text-cyan-400 text-xs tracking-widest uppercase transition-colors">{l}</a>
         ))}
         <button onClick={() => setPage("resume")} className="text-slate-500 hover:text-cyan-400 text-xs tracking-widest uppercase transition-colors cursor-pointer">Resume</button>
       </div>
+      <p className="text-slate-500 text-xs font-mono text-center">© 2025 Aahnaa Technologies. All rights reserved.</p>
     </footer>
   );
 }
