@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<body style="margin:0;padding:0;background:#020817;font-family:'Segoe UI',Arial,sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#020817;padding:40px 0;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#0a0f1e;border-radius:16px;overflow:hidden;border:1px solid #0e2a4a;">
+
+  <!-- STARFIELD HEADER -->
+  <tr>
+    <td style="background:linear-gradient(180deg,#020817 0%,#0a1628 60%,#020817 100%);padding:48px 40px 36px;text-align:center;border-bottom:1px solid #0e3060;position:relative;">
+      
+      <!-- CSS Logo matching website -->
+      <div style="margin-bottom:20px;">
+        <div style="display:inline-block;width:60px;height:60px;position:relative;">
+          <div style="width:60px;height:60px;border:2px solid #00d4ff;border-radius:50%;position:absolute;top:0;left:0;box-shadow:0 0 20px rgba(0,212,255,0.4);transform:rotate(-30deg);"></div>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-56%);color:#00d4ff;font-size:30px;font-weight:900;text-shadow:0 0 20px rgba(0,212,255,0.8);">A</div>
+        </div>
+      </div>
+
+      <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">AAHNAA TECHNOLOGIES</h1>
+      <p style="margin:8px 0 0;color:#00d4ff;font-size:11px;letter-spacing:4px;text-transform:uppercase;">Launch Your Tech Career into Orbit</p>
+
+      <!-- Decorative dots like starfield -->
+      <div style="margin-top:20px;">
+        <span style="display:inline-block;width:4px;height:4px;background:#00d4ff;border-radius:50%;margin:0 8px;opacity:0.6;"></span>
+        <span style="display:inline-block;width:6px;height:6px;background:#00d4ff;border-radius:50%;margin:0 8px;box-shadow:0 0 6px #00d4ff;"></span>
+        <span style="display:inline-block;width:4px;height:4px;background:#00d4ff;border-radius:50%;margin:0 8px;opacity:0.6;"></span>
+      </div>
+    </td>
+  </tr>
+
+  <!-- SUCCESS BADGE -->
+  <tr>
+    <td style="padding:32px 40px 8px;text-align:center;">
+      <div style="display:inline-block;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.3);border-radius:50px;padding:10px 28px;">
+        <span style="color:#00ff88;font-weight:600;font-size:13px;letter-spacing:2px;text-transform:uppercase;">✅ Order Confirmed</span>
+      </div>
+      <h2 style="margin:20px 0 8px;color:#ffffff;font-size:24px;font-weight:700;">Hey {{ $json.name }}! 👋</h2>
+      <p style="margin:0;color:#64748b;font-size:15px;line-height:1.7;">Your order is locked in and our team is<br/>already preparing your deliverables 🚀</p>
+    </td>
+  </tr>
+
+  <!-- ORDER SUMMARY -->
+  <tr>
+    <td style="padding:24px 40px;">
+      <div style="background:#060d1a;border-radius:12px;border:1px solid #0e2a4a;padding:28px;box-shadow:0 0 30px rgba(0,212,255,0.05);">
+        
+        <p style="margin:0 0 20px;color:#00d4ff;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:600;">📋 Mission Brief</p>
+
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="padding:12px 0;border-bottom:1px solid #0e2a4a;">
+              <span style="color:#475569;font-size:13px;">Plan</span>
+            </td>
+            <td style="padding:12px 0;border-bottom:1px solid #0e2a4a;text-align:right;">
+              <span style="color:#e2e8f0;font-weight:600;font-size:14px;">{{ $json.plan }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:12px 0;border-bottom:1px solid #0e2a4a;">
+              <span style="color:#475569;font-size:13px;">Service</span>
+            </td>
+            <td style="padding:12px 0;border-bottom:1px solid #0e2a4a;text-align:right;">
+              <span style="color:#e2e8f0;font-weight:600;font-size:14px;">{{ $json.service }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:12px 0;border-bottom:1px solid #0e2a4a;">
+              <span style="color:#475569;font-size:13px;">Amount Paid</span>
+            </td>
+            <td style="padding:12px 0;border-bottom:1px solid #0e2a4a;text-align:right;">
+              <span style="color:#00ff88;font-weight:700;font-size:20px;">₹{{ $json.amount }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:12px 0;border-bottom:1px solid #0e2a4a;">
+              <span style="color:#475569;font-size:13px;">Order ID</span>
+            </td>
+            <td style="padding:12px 0;border-bottom:1px solid #0e2a4a;text-align:right;">
+              <span style="color:#00d4ff;font-size:12px;font-family:monospace;letter-spacing:1px;">{{ $json.orderId }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:12px 0;">
+              <span style="color:#475569;font-size:13px;">Requirement</span>
+            </td>
+            <td style="padding:12px 0;text-align:right;">
+              <span style="color:#e2e8f0;font-size:14px;">{{ $json.requirement }}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </td>
+  </tr>
+
+  <!-- NEXT STEPS -->
+  <tr>
+    <td style="padding:0 40px 24px;">
+      <div style="background:#060d1a;border-radius:12px;border:1px solid #0e2a4a;padding:28px;">
+        <p style="margin:0 0 20px;color:#00d4ff;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:600;">⚡ Launch Sequence</p>
+
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="padding:12px 0;vertical-align:top;width:40px;border-bottom:1px solid #0e2a4a;">
+              <div style="width:28px;height:28px;background:transparent;border:1px solid #00d4ff;border-radius:50%;text-align:center;line-height:26px;color:#00d4ff;font-size:12px;font-weight:700;box-shadow:0 0 10px rgba(0,212,255,0.3);">1</div>
+            </td>
+            <td style="padding:12px 0 12px 14px;vertical-align:top;border-bottom:1px solid #0e2a4a;">
+              <p style="margin:0;color:#e2e8f0;font-size:14px;font-weight:600;">WhatsApp contact within 2 hours</p>
+              <p style="margin:4px 0 0;color:#475569;font-size:13px;">Reaching you at {{ $json.phone }}</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:12px 0;vertical-align:top;width:40px;border-bottom:1px solid #0e2a4a;">
+              <div style="width:28px;height:28px;background:transparent;border:1px solid #00d4ff;border-radius:50%;text-align:center;line-height:26px;color:#00d4ff;font-size:12px;font-weight:700;box-shadow:0 0 10px rgba(0,212,255,0.3);">2</div>
+            </td>
+            <td style="padding:12px 0 12px 14px;vertical-align:top;border-bottom:1px solid #0e2a4a;">
+              <p style="margin:0;color:#e2e8f0;font-size:14px;font-weight:600;">Expert team assigned immediately</p>
+              <p style="margin:4px 0 0;color:#475569;font-size:13px;">Work begins on your order right away</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:12px 0;vertical-align:top;width:40px;">
+              <div style="width:28px;height:28px;background:transparent;border:1px solid #00d4ff;border-radius:50%;text-align:center;line-height:26px;color:#00d4ff;font-size:12px;font-weight:700;box-shadow:0 0 10px rgba(0,212,255,0.3);">3</div>
+            </td>
+            <td style="padding:12px 0 12px 14px;vertical-align:top;">
+              <p style="margin:0;color:#e2e8f0;font-size:14px;font-weight:600;">Delivery in 3-5 days</p>
+              <p style="margin:4px 0 0;color:#475569;font-size:13px;">Quality checked before it reaches you</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </td>
+  </tr>
+
+  <!-- CTA BUTTON -->
+  <tr>
+    <td style="padding:0 40px 36px;text-align:center;">
+      <p style="margin:0 0 20px;color:#475569;font-size:14px;">Need help? We're always online.</p>
+      <a href="https://wa.me/917093525891" style="display:inline-block;background:linear-gradient(135deg,#00d4ff,#0077ff);color:#000000;text-decoration:none;padding:14px 40px;border-radius:50px;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;box-shadow:0 4px 20px rgba(0,212,255,0.35);">💬 WhatsApp Us Now</a>
+    </td>
+  </tr>
+
+  <!-- FOOTER -->
+  <tr>
+    <td style="background:#020817;padding:24px 40px;text-align:center;border-top:1px solid #0e2a4a;">
+      <p style="margin:0;color:#00d4ff;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;">Aahnaa Technologies</p>
+      <p style="margin:8px 0 0;color:#334155;font-size:12px;">aahnaatechnologies@gmail.com | +91 7093525891</p>
+      <p style="margin:8px 0 0;color:#1e293b;font-size:11px;">© 2026 Aahnaa Technologies.</p>
+    </td>
+  </tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>
