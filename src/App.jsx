@@ -1586,13 +1586,13 @@ function ResumeBuilder() {
 
 // ─── ORDER & PAYMENT PAGE ─────────────────────────────────────────────────────
 const SERVICES_CONFIG = {
-  booster:   { label: "⚡ Resume Booster Pack – 3 Projects", tiers: { "Resume Booster Pack": 699 } },
+  booster:   { label: "⚡ Resume Booster Pack – 3 Projects", tiers: { "Resume Booster Pack": 799 } },
   starter:   { label: "🚀 Starter Pack",        tiers: { "Starter Pack": 299 } },
-  jobready:  { label: "💼 Job Ready Pack",       tiers: { "Job Ready Pack": 499 } },
+  jobready:  { label: "💼 Job Ready Pack",       tiers: { "Job Ready Pack": 599 } },
   placement: { label: "👑 Placement Pack",       tiers: { "Placement Pack": 999 } },
-  portfolio: { label: "🌐 Portfolio Pack",       tiers: { "Portfolio Pack": 399 } },
+  portfolio: { label: "🌐 Portfolio Pack",       tiers: { "Portfolio Pack": 499 } },
   port_ind:  { label: "🌐 Portfolio Website",    tiers: { Basic: 199, Pro: 399, Premium: 999 } },
-  proj_ind:  { label: "🚀 Deploy-Ready Project", tiers: { Easy: 99, Medium: 249, High: 499 } },
+  proj_ind:  { label: "🚀 Deploy-Ready Project", tiers: { Easy: 199, Medium: 299, High: 499 } },
   docs_ind:  { label: "📄 Interview Docs",       tiers: { Basic: 99, Pro: 199, Premium: 349 } },
 };
 
