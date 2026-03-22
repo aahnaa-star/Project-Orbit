@@ -423,7 +423,7 @@ function Hero({ setPage }) {
       {/* Badge */}
       <div className="relative z-10 flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 rounded-full px-4 py-2 mb-8 animate-fade-down">
         <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-lg shadow-cyan-400 flex-shrink-0" />
-        <span className="font-mono text-cyan-400 text-xs tracking-wide">Now Onboarding Students — Batch 2025</span>
+        <span className="font-mono text-cyan-400 text-xs tracking-wide">Now Onboarding Students — Batch 2026</span>
       </div>
 
       {/* Headline */}
@@ -466,9 +466,9 @@ function Hero({ setPage }) {
 // ─── STATS ────────────────────────────────────────────────────────────────────
 function Stats() {
   const items = [
-    { num: "500+", label: "Portfolios Built" },
+    { num: "80+", label: "Portfolios Built" },
     { num: "120+", label: "Deploy-Ready Projects" },
-    { num: "98%",  label: "Placement Success" },
+    { num: "95%",  label: "Placement Success" },
     { num: "4",    label: "Service Verticals" },
   ];
   return (
@@ -640,7 +640,8 @@ function HowItWorks() {
 }
 
 // ─── CTA ──────────────────────────────────────────────────────────────────────
-// ─── TESTIMONIALS ─────────────────────────────────────────────────────────────
+// ─── TESTIMONIALS (commented out — uncomment when real reviews are ready) ──────
+/*
 function Testimonials() {
   const reviews = [
     {
@@ -697,20 +698,14 @@ function Testimonials() {
         {reviews.map((r, i) => (
           <div key={i} className="reveal group bg-[#0a1428]/70 border border-cyan-500/15 rounded-2xl p-8 backdrop-blur-xl hover:-translate-y-1 hover:border-cyan-500/30 transition-all duration-300"
             style={{ transitionDelay: `${i * 80}ms` }}>
-            {/* Stars */}
             <div className="flex gap-1 mb-4">
               {Array(r.rating).fill(0).map((_, j) => (
                 <span key={j} className="text-amber-400 text-sm">★</span>
               ))}
             </div>
-
-            {/* Review text */}
             <p className="text-slate-300 text-sm leading-relaxed mb-6 italic">"{r.text}"</p>
-
-            {/* Pack badge */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                {/* Avatar */}
                 <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${r.color} flex items-center justify-center text-white text-xs font-black flex-shrink-0`}>
                   {r.avatar}
                 </div>
@@ -727,7 +722,6 @@ function Testimonials() {
         ))}
       </div>
 
-      {/* Social proof bar */}
       <div className="reveal mt-12 flex flex-wrap justify-center gap-8 text-center">
         {[
           { num: "500+", label: "Students Served" },
@@ -745,6 +739,7 @@ function Testimonials() {
     </section>
   );
 }
+*/
 function FAQ() {
   const [open, setOpen] = useState(null);
 
@@ -855,7 +850,7 @@ const BUNDLES = [
   {
     icon: "⚡", name: "Resume Booster Pack", badge: "🔥 Highest Demand",
     highlight: true,
-    original: "₹1,499", price: "₹699", amount: 699,
+    original: "₹1,499", price: "₹799", amount: 799,
     desc: "3 resume-ready projects that fill your resume, kill interview fear, and build real confidence.",
     includes: [
       "3 Projects: Easy + Medium + Advanced",
@@ -878,7 +873,7 @@ const BUNDLES = [
   {
     icon: "💼", name: "Job Ready Pack", badge: "⭐ Most Popular",
     highlight: false,
-    original: "₹1,999", price: "₹499", amount: 499,
+    original: "₹1,999", price: "₹599", amount: 599,
     desc: "The complete package most students choose for placements.",
     includes: ["Medium Full-Stack Project", "Pro IEEE Documentation", "ATS Resume (Free)", "Vercel Deployment", "Delivered in 3 days"],
     color: "from-blue-500/15 to-cyan-900/10", border: "border-cyan-400/40", badgeCls: "bg-cyan-500/15 text-cyan-400 border-cyan-400/30",
@@ -894,7 +889,7 @@ const BUNDLES = [
   {
     icon: "🌐", name: "Portfolio Pack", badge: "Stand Out Online",
     highlight: false,
-    original: "₹1,499", price: "₹399", amount: 399,
+    original: "₹1,499", price: "₹499", amount: 499,
     desc: "A stunning portfolio + ATS resume to impress recruiters.",
     includes: ["Pro Portfolio Website", "Custom Design + Animations", "ATS Resume (Free)", "Mobile Responsive", "Delivered in 4 days"],
     color: "from-purple-500/10 to-purple-900/5", border: "border-purple-400/20", badgeCls: "bg-purple-500/15 text-purple-400 border-purple-400/30",
@@ -1126,7 +1121,7 @@ function Footer({ setPage }) {
         ))}
         <button onClick={() => setPage("resume")} className="text-slate-500 hover:text-cyan-400 text-xs tracking-widest uppercase transition-colors cursor-pointer">Resume</button>
       </div>
-      <p className="text-slate-500 text-xs font-mono text-center">© 2025 Aahnaa Technologies. All rights reserved.</p>
+      <p className="text-slate-500 text-xs font-mono text-center">© 2026 Aahnaa Technologies. All rights reserved.</p>
     </footer>
   );
 }
@@ -1142,7 +1137,7 @@ function HomePage({ setPage }) {
       <ProjectLevels />
       <HowItWorks />
       <Pricing setPage={setPage} />
-      <Testimonials />
+      {/* <Testimonials /> */}
       <FAQ />
       <CTA setPage={setPage} />
     </>
