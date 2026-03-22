@@ -1694,20 +1694,20 @@ function OrderPage({ setPage }) {
   };
 
   return (
-    <div className="relative z-10 min-h-screen pt-28 px-6 md:px-12 pb-20">
+    <div className="relative z-10 min-h-screen pt-24 px-4 md:px-12 pb-20">
       {/* Header */}
-      <div className="text-center mb-10">
+      <div className="text-center mb-8">
         <p className="flex items-center justify-center gap-3 text-cyan-400 font-mono text-xs tracking-widest uppercase mb-3">
-          <span className="w-8 h-px bg-cyan-400" />Place Your Order<span className="w-8 h-px bg-cyan-400" />
+          <span className="w-6 h-px bg-cyan-400" />Place Your Order<span className="w-6 h-px bg-cyan-400" />
         </p>
-        <h2 className="text-4xl md:text-5xl font-black mb-3" style={{ fontFamily: "'Orbitron', monospace" }}>Order Now</h2>
-        <p className="text-slate-400 max-w-md mx-auto text-sm">Select your service, fill your details, pay via UPI and we'll get started!</p>
+        <h2 className="text-3xl md:text-5xl font-black mb-2" style={{ fontFamily: "'Orbitron', monospace" }}>Order Now</h2>
+        <p className="text-slate-400 max-w-md mx-auto text-xs md:text-sm">Select your service, fill your details, pay via UPI and we'll get started!</p>
       </div>
 
       <div className="max-w-2xl mx-auto">
         <Progress />
 
-        <div className="bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-8 backdrop-blur-xl">
+        <div className="bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-5 md:p-8 backdrop-blur-xl">
 
           {/* ── STEP 1: Select Service & Tier ── */}
           {step === 1 && (
@@ -1879,7 +1879,7 @@ function OrderPage({ setPage }) {
                   @keyframes ping2 { 0%{transform:scale(1);opacity:0.8} 100%{transform:scale(2.5);opacity:0} }
                 `}</style>
 
-                <div className="relative rounded-3xl bg-[#060d1f] overflow-hidden p-8">
+                <div className="relative rounded-3xl bg-[#060d1f] overflow-hidden p-5 sm:p-8">
                   {/* Background orbs */}
                   <div className="absolute top-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
                   <div className="absolute bottom-0 right-0 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
@@ -1900,19 +1900,22 @@ function OrderPage({ setPage }) {
                   </div>
 
                   {/* Amount display */}
-                  <div className="relative text-center mb-8">
-                    <p className="text-slate-500 text-xs font-mono tracking-widest uppercase mb-2">Total Amount</p>
-                    <div className="flex items-center justify-center gap-1">
-                      <span className="text-2xl text-cyan-400 font-bold mt-2">₹</span>
-                      <span className="text-7xl font-black text-white" style={{ fontFamily: "'Orbitron', monospace", textShadow: "0 0 40px rgba(0,212,255,0.3)" }}>
+                  <div className="relative text-center mb-6">
+                    <p className="text-slate-500 text-xs font-mono tracking-widest uppercase mb-3">Total Amount</p>
+                    <div className="flex items-baseline justify-center gap-1">
+                      <span className="text-2xl text-cyan-400 font-bold">₹</span>
+                      <span className="text-5xl sm:text-6xl font-black text-white" style={{ fontFamily: "'Orbitron', monospace", textShadow: "0 0 40px rgba(0,212,255,0.3)" }}>
                         {amount}
                       </span>
                     </div>
-                    <p className="text-slate-400 text-xs font-mono mt-2">{SERVICES_CONFIG[service]?.label} — {tier} Plan</p>
+                    {/* Clean service label — no repetition */}
+                    <p className="text-slate-400 text-xs font-mono mt-2 px-2 leading-relaxed">
+                      {SERVICES_CONFIG[service]?.label?.replace(/^[^\w]*/, '')}
+                    </p>
                   </div>
 
                   {/* UPI Apps row */}
-                  <div className="relative flex justify-center gap-4 mb-8">
+                  <div className="relative flex justify-center gap-3 sm:gap-4 mb-6">
                     {[
                       { name: "GPay", color: "#4285F4", emoji: "G" },
                       { name: "PhonePe", color: "#5F259F", emoji: "P" },
@@ -1920,10 +1923,10 @@ function OrderPage({ setPage }) {
                       { name: "BHIM", color: "#00A550", emoji: "B" },
                     ].map((app) => (
                       <a key={app.name}
-                        href={`upi://pay?pa=${UPI_ID}&pn=Aahnaa+Technologies&am=${amount}&cu=INR&tn=${encodeURIComponent(`${SERVICES_CONFIG[service]?.label} - ${tier}`)}`}
-                        className="flex flex-col items-center gap-1.5 group cursor-pointer">
-                        <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-lg transition-all group-hover:-translate-y-1 group-hover:shadow-lg"
-                          style={{ background: app.color, boxShadow: `0 4px 20px ${app.color}40` }}>
+                        href={`upi://pay?pa=${UPI_ID}&pn=Aahnaa+Technologies&am=${amount}&cu=INR`}
+                        className="flex flex-col items-center gap-1.5 cursor-pointer">
+                        <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-lg"
+                          style={{ background: app.color, boxShadow: `0 4px 16px ${app.color}50` }}>
                           {app.emoji}
                         </div>
                         <span className="text-slate-500 text-xs font-mono">{app.name}</span>
@@ -1932,25 +1935,25 @@ function OrderPage({ setPage }) {
                   </div>
 
                   {/* Divider */}
-                  <div className="relative flex items-center gap-3 mb-6">
+                  <div className="relative flex items-center gap-3 mb-5">
                     <div className="flex-1 h-px bg-gradient-to-r from-transparent to-cyan-500/30" />
-                    <span className="text-slate-500 text-xs font-mono px-2">or pay using UPI ID</span>
+                    <span className="text-slate-500 text-xs font-mono px-2 whitespace-nowrap">or pay using UPI ID</span>
                     <div className="flex-1 h-px bg-gradient-to-l from-transparent to-cyan-500/30" />
                   </div>
 
                   {/* UPI ID copy */}
-                  <div className="relative flex items-center gap-3 bg-[#0a1428] border border-cyan-500/20 rounded-2xl px-5 py-4 mb-6">
-                    <div className="flex-1">
+                  <div className="relative flex items-center gap-2 bg-[#0a1428] border border-cyan-500/20 rounded-2xl px-4 py-3 mb-5">
+                    <div className="flex-1 min-w-0">
                       <p className="text-slate-500 text-xs font-mono mb-0.5">UPI ID</p>
-                      <p className="text-cyan-400 font-mono font-bold tracking-wider text-base">{UPI_ID}</p>
+                      <p className="text-cyan-400 font-mono font-bold text-sm truncate">{UPI_ID}</p>
                     </div>
                     <button onClick={copyUPI}
-                      className={`px-5 py-2.5 rounded-xl text-xs font-bold tracking-widest uppercase border transition-all cursor-pointer
+                      className={`flex-shrink-0 px-4 py-2 rounded-xl text-xs font-bold tracking-widest uppercase border transition-all cursor-pointer
                         ${copied
-                          ? "border-green-500 text-green-400 bg-green-500/15 shadow-lg shadow-green-500/20"
-                          : "border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-400"}`}
+                          ? "border-green-500 text-green-400 bg-green-500/15"
+                          : "border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"}`}
                       style={{ fontFamily: "'Orbitron', monospace" }}>
-                      {copied ? "✓ Copied!" : "Copy"}
+                      {copied ? "✓" : "Copy"}
                     </button>
                   </div>
 
