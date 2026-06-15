@@ -850,7 +850,7 @@ const BUNDLES = [
   {
     icon: "⚡", name: "Resume Booster Pack", badge: "🔥 Highest Demand",
     highlight: true,
-    original: "₹1,499", price: "₹799", amount: 799,
+    original: "₹2,499", price: "₹1,299", amount: 1299,
     desc: "3 resume-ready projects that fill your resume, kill interview fear, and build real confidence.",
     includes: [
       "3 Projects: Easy + Medium + Advanced",
@@ -865,7 +865,7 @@ const BUNDLES = [
   {
     icon: "🚀", name: "Starter Pack", badge: "Best for Freshers",
     highlight: false,
-    original: "₹599", price: "₹299", amount: 299,
+    original: "₹999", price: "₹499", amount: 499,
     desc: "Everything a fresher needs to start their job hunt.",
     includes: ["Easy Deploy-Ready Project", "Basic Documentation", "GitHub-ready code", "README file", "Delivered in 2 days"],
     color: "from-green-500/10 to-green-900/5", border: "border-green-500/20", badgeCls: "bg-green-500/15 text-green-400 border-green-500/30",
@@ -873,7 +873,7 @@ const BUNDLES = [
   {
     icon: "💼", name: "Job Ready Pack", badge: "⭐ Most Popular",
     highlight: false,
-    original: "₹1,599", price: "₹599", amount: 599,
+    original: "₹1,999", price: "₹999", amount: 999,
     desc: "The complete package most students choose for placements.",
     includes: ["Medium Full-Stack Project", "Pro IEEE Documentation", "ATS Resume (Free)", "Vercel Deployment", "Delivered in 3 days"],
     color: "from-blue-500/15 to-cyan-900/10", border: "border-cyan-400/40", badgeCls: "bg-cyan-500/15 text-cyan-400 border-cyan-400/30",
@@ -881,7 +881,7 @@ const BUNDLES = [
   {
     icon: "👑", name: "Placement Pack", badge: "Maximum Value",
     highlight: false,
-    original: "₹2,999", price: "₹999", amount: 999,
+    original: "₹3,499", price: "₹1,799", amount: 1799,
     desc: "The ultimate bundle for students targeting top companies.",
     includes: ["Pro Portfolio Website", "High-Level Project (AI/ML/DevOps)", "Premium IEEE Docs + PPT", "ATS Resume (Free)", "Delivered in 5–7 days"],
     color: "from-amber-500/10 to-amber-900/5", border: "border-amber-400/25", badgeCls: "bg-amber-500/15 text-amber-400 border-amber-400/30",
@@ -889,7 +889,7 @@ const BUNDLES = [
   {
     icon: "🌐", name: "Portfolio Pack", badge: "Stand Out Online",
     highlight: false,
-    original: "₹1,499", price: "₹499", amount: 499,
+    original: "₹1,799", price: "₹849", amount: 849,
     desc: "A stunning portfolio + ATS resume to impress recruiters.",
     includes: ["Pro Portfolio Website", "Custom Design + Animations", "ATS Resume (Free)", "Mobile Responsive", "Delivered in 4 days"],
     color: "from-purple-500/10 to-purple-900/5", border: "border-purple-400/20", badgeCls: "bg-purple-500/15 text-purple-400 border-purple-400/30",
@@ -897,9 +897,9 @@ const BUNDLES = [
 ];
 
 const ADDONS = [
-  { icon: "🌐", name: "Portfolio Website", tiers: [{ t: "Basic", p: "₹199", a: 199 }, { t: "Pro", p: "₹399", a: 399 }, { t: "Premium", p: "₹999", a: 999 }] },
-  { icon: "🚀", name: "Deploy-Ready Project", tiers: [{ t: "Easy", p: "₹199", a: 199 }, { t: "Medium", p: "₹299", a: 299 }, { t: "High", p: "₹499", a: 499 }] },
-  { icon: "📄", name: "Interview Docs", tiers: [{ t: "Basic", p: "₹99", a: 99 }, { t: "Pro", p: "₹199", a: 199 }, { t: "Premium", p: "₹349", a: 349 }] },
+  { icon: "🌐", name: "Portfolio Website", tiers: [{ t: "Basic", p: "₹349", a: 349 }, { t: "Pro", p: "₹699", a: 699 }, { t: "Premium", p: "₹1,499", a: 1499 }] },
+  { icon: "🚀", name: "Deploy-Ready Project", tiers: [{ t: "Easy", p: "₹349", a: 349 }, { t: "Medium", p: "₹549", a: 549 }, { t: "High", p: "₹849", a: 849 }] },
+  { icon: "📄", name: "Interview Docs", tiers: [{ t: "Basic", p: "₹199", a: 199 }, { t: "Pro", p: "₹349", a: 349 }, { t: "Premium", p: "₹599", a: 599 }] },
 ];
 
 function Pricing({ setPage }) {
@@ -928,8 +928,8 @@ function Pricing({ setPage }) {
           <div className="flex items-center gap-4">
             <span className="text-3xl">🎉</span>
             <div>
-              <p className="text-amber-300 font-bold text-sm tracking-wide" style={{ fontFamily: "'Orbitron', monospace" }}>LAUNCH OFFER — Limited Time Only!</p>
-              <p className="text-slate-400 text-xs mt-0.5 font-mono">Prices increase after first 100 students. Grab it now!</p>
+              <p className="text-amber-300 font-bold text-sm tracking-wide" style={{ fontFamily: "'Orbitron', monospace" }}>TRUSTED BY 20+ HAPPY CLIENTS ⭐</p>
+              <p className="text-slate-400 text-xs mt-0.5 font-mono">Premium quality, proven results — still the best value for B.Tech students.</p>
             </div>
           </div>
           <div className="flex items-center gap-2 bg-amber-500/20 border border-amber-400/30 rounded-xl px-5 py-2 whitespace-nowrap">
@@ -973,7 +973,7 @@ function Pricing({ setPage }) {
                       <div className="flex items-center gap-3 mb-3">
                         <span className="text-3xl">{b.icon}</span>
                         <span className="px-3 py-1 rounded-full bg-rose-500/20 border border-rose-400/40 text-rose-300 text-xs font-bold tracking-widest">{b.tag}</span>
-                        <span className="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-mono">🎉 Launch Offer</span>
+                        <span className="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-mono">⭐ 20+ Happy Clients</span>
                       </div>
                       <h3 className="text-2xl md:text-3xl font-black text-white mb-2" style={{ fontFamily: "'Orbitron', monospace" }}>{b.name}</h3>
                       <p className="text-slate-300 text-sm leading-relaxed mb-5 max-w-lg">{b.desc}</p>
@@ -1586,14 +1586,14 @@ function ResumeBuilder() {
 
 // ─── ORDER & PAYMENT PAGE ─────────────────────────────────────────────────────
 const SERVICES_CONFIG = {
-  booster:   { label: "⚡ Resume Booster Pack – 3 Projects", tiers: { "Resume Booster Pack": 799 } },
-  starter:   { label: "🚀 Starter Pack",        tiers: { "Starter Pack": 299 } },
-  jobready:  { label: "💼 Job Ready Pack",       tiers: { "Job Ready Pack": 599 } },
-  placement: { label: "👑 Placement Pack",       tiers: { "Placement Pack": 999 } },
-  portfolio: { label: "🌐 Portfolio Pack",       tiers: { "Portfolio Pack": 499 } },
-  port_ind:  { label: "🌐 Portfolio Website",    tiers: { Basic: 199, Pro: 399, Premium: 999 } },
-  proj_ind:  { label: "🚀 Deploy-Ready Project", tiers: { Easy: 199, Medium: 299, High: 499 } },
-  docs_ind:  { label: "📄 Interview Docs",       tiers: { Basic: 99, Pro: 199, Premium: 349 } },
+  booster:   { label: "⚡ Resume Booster Pack – 3 Projects", tiers: { "Resume Booster Pack": 1299 } },
+  starter:   { label: "🚀 Starter Pack",        tiers: { "Starter Pack": 499 } },
+  jobready:  { label: "💼 Job Ready Pack",       tiers: { "Job Ready Pack": 999 } },
+  placement: { label: "👑 Placement Pack",       tiers: { "Placement Pack": 1799 } },
+  portfolio: { label: "🌐 Portfolio Pack",       tiers: { "Portfolio Pack": 849 } },
+  port_ind:  { label: "🌐 Portfolio Website",    tiers: { Basic: 349, Pro: 699, Premium: 1499 } },
+  proj_ind:  { label: "🚀 Deploy-Ready Project", tiers: { Easy: 349, Medium: 549, High: 849 } },
+  docs_ind:  { label: "📄 Interview Docs",       tiers: { Basic: 199, Pro: 349, Premium: 599 } },
 };
 
 const UPI_ID = "7093525891@ptsbi";
