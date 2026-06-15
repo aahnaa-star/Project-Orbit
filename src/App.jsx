@@ -1716,11 +1716,11 @@ function OrderPage({ setPage }) {
             <p className="text-xs font-mono text-amber-400/80 tracking-widest uppercase mb-2">🔥 Combo Packs</p>
             <div className="space-y-2 mb-4">
               {[
-                { key: "booster",   label: "⚡ Resume Booster Pack", price: "₹799", badge: "🔥 Best Seller" },
-                { key: "starter",   label: "🚀 Starter Pack",         price: "₹299", badge: "Freshers" },
-                { key: "jobready",  label: "💼 Job Ready Pack",        price: "₹599", badge: "⭐ Popular" },
-                { key: "placement", label: "👑 Placement Pack",        price: "₹999", badge: "Max Value" },
-                { key: "portfolio", label: "🌐 Portfolio Pack",        price: "₹499", badge: "Stand Out" },
+                { key: "booster",   label: "⚡ Resume Booster Pack", price: "₹1,299", badge: "🔥 Best Seller" },
+                { key: "starter",   label: "🚀 Starter Pack",         price: "₹499", badge: "Freshers" },
+                { key: "jobready",  label: "💼 Job Ready Pack",        price: "₹999", badge: "⭐ Popular" },
+                { key: "placement", label: "👑 Placement Pack",        price: "₹1,799", badge: "Max Value" },
+                { key: "portfolio", label: "🌐 Portfolio Pack",        price: "₹849", badge: "Stand Out" },
               ].map((s) => (
                 <button key={s.key} onClick={() => { setService(s.key); setTier(Object.keys(SERVICES_CONFIG[s.key].tiers)[0]); }}
                   className={`w-full text-left px-4 py-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-2
