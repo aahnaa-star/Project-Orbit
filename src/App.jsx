@@ -144,8 +144,8 @@ function CustomCursor() {
 }
 
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
-const PHONE = "+917093525891";
-const WA_LINK = `https://wa.me/917093525891`;
+const PHONE = "917093525891";
+const WA_LINK = `https://wa.me/${PHONE}?text=${encodeURIComponent("Hi Aahnaa Technologies! I’d like to discuss my learning goal.")}`;
 const MAIL = "aahnaatechnologies@gmail.com";
 
 // ─── UTILITY HOOKS ────────────────────────────────────────────────────────────
@@ -349,7 +349,7 @@ function Nav({ page, setPage }) {
     { label: "Projects",   action: () => { setPage("home"); setMenuOpen(false); setTimeout(() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" }), 100); } },
     { label: "Process",    action: () => { setPage("home"); setMenuOpen(false); setTimeout(() => document.getElementById("process")?.scrollIntoView({ behavior: "smooth" }), 100); } },
     { label: "Pricing",    action: () => { setPage("home"); setMenuOpen(false); setTimeout(() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" }), 100); } },
-    { label: "ATS Resume", action: () => { setPage("resume"); setMenuOpen(false); } },
+    { label: "Resume Builder", action: () => { setPage("resume"); setMenuOpen(false); } },
     { label: "Order Now",  action: () => { setPage("order"); setMenuOpen(false); } },
   ];
 
@@ -368,7 +368,7 @@ function Nav({ page, setPage }) {
           {navLinks.map((l) => (
             <button key={l.label} onClick={l.action}
               className={`text-xs tracking-widest uppercase transition-colors cursor-pointer
-                ${(l.label === "ATS Resume" && page === "resume") || (l.label === "Order Now" && page === "order")
+                ${(l.label === "Resume Builder" && page === "resume") || (l.label === "Order Now" && page === "order")
                   ? "text-cyan-400" : "text-slate-400 hover:text-cyan-400"}`}>
               {l.label}
             </button>
@@ -423,31 +423,31 @@ function Hero({ setPage }) {
       {/* Badge */}
       <div className="relative z-10 flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 rounded-full px-4 py-2 mb-8 animate-fade-down">
         <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-lg shadow-cyan-400 flex-shrink-0" />
-        <span className="font-mono text-cyan-400 text-xs tracking-wide">Now Onboarding Students — Batch 2026</span>
+        <span className="font-mono text-cyan-400 text-xs tracking-wide">Practical tech career support for students</span>
       </div>
 
       {/* Headline */}
       <h1 className="relative z-10 text-4xl sm:text-5xl md:text-7xl font-black leading-tight mb-5" style={{ fontFamily: "'Orbitron', monospace" }}>
-        <span className="block text-white">Launch Your</span>
+        <span className="block text-white">Build Skills That</span>
         <span className="block bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent bg-[length:200%] animate-shimmer">
-          Tech Career into Orbit
+          Move Your Career Forward
         </span>
       </h1>
 
       <p className="relative z-10 max-w-lg text-slate-400 text-sm md:text-lg leading-relaxed mb-10 px-2">
-        We help B.Tech students build stunning portfolios, access deploy-ready projects, create interview-winning documentation, and generate ATS-optimized resumes — everything you need to land your dream role.
+        Build practical projects, create a portfolio that reflects your work, and prepare for interviews with clear guidance. Start with a free resume builder or talk with us about your goals.
       </p>
 
       <div className="relative z-10 flex flex-col sm:flex-row gap-3 w-full max-w-sm sm:max-w-none sm:justify-center px-2">
         <button onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })}
           className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 text-white font-bold tracking-widest uppercase text-xs shadow-2xl shadow-cyan-500/40 transition-all cursor-pointer"
           style={{ fontFamily: "'Orbitron', monospace" }}>
-          Explore Services
+          Explore How We Help
         </button>
         <button onClick={() => setPage("resume")}
           className="w-full sm:w-auto px-8 py-4 rounded-xl border border-cyan-500/30 text-cyan-400 font-bold tracking-widest uppercase text-xs hover:bg-cyan-500/10 transition-all cursor-pointer"
           style={{ fontFamily: "'Orbitron', monospace" }}>
-          Build Resume ✨
+          Try the Free Resume Builder
         </button>
       </div>
 
@@ -466,10 +466,10 @@ function Hero({ setPage }) {
 // ─── STATS ────────────────────────────────────────────────────────────────────
 function Stats() {
   const items = [
-    { num: "80+", label: "Portfolios Built" },
-    { num: "120+", label: "Deploy-Ready Projects" },
-    { num: "95%",  label: "Placement Success" },
-    { num: "4",    label: "Service Verticals" },
+    { num: "01", label: "See each package price up front" },
+    { num: "02", label: "Build practical skills as you go" },
+    { num: "03", label: "Understand and explain your work" },
+    { num: "04", label: "Get support directly on WhatsApp" },
   ];
   return (
     <div className="relative z-10 grid grid-cols-2 md:flex md:flex-row justify-center gap-4 md:gap-0 px-6 mb-20 reveal max-w-2xl mx-auto">
@@ -489,26 +489,26 @@ function Services({ setPage }) {
   const cards = [
     {
       num: "01", icon: "🌐", title: "Portfolio Website",
-      desc: "A stunning, professional portfolio that gets noticed by recruiters. Custom-built to reflect your skills, projects, and personality — hosted and ready to share.",
+      desc: "A responsive portfolio shaped around your real skills and projects, with guidance to help you update and maintain it yourself.",
       tags: ["Custom Design", "Fully Hosted", "Mobile Ready"],
       cta: "See Pricing →",
     },
     {
-      num: "02", icon: "🚀", title: "Deploy-Ready Projects",
-      desc: "Real, working projects across Easy, Medium, and High complexity levels. Full source code, deployment setup, and tech stack documentation included.",
-      tags: ["3 Levels", "Source Code", "Deployment Guide"],
+      num: "02", icon: "🚀", title: "Guided Project Builds",
+      desc: "Work through a practical project with setup help, code walkthroughs, and deployment guidance so you understand what you build.",
+      tags: ["Hands-On Guidance", "Code Walkthrough", "Deployment Help"],
       cta: "See Pricing →",
     },
     {
-      num: "03", icon: "📄", title: "Interview-Ready Docs",
-      desc: "Professional project documentation and interview reports structured to impress. Prepared in standard formats used by top tech companies.",
-      tags: ["IEEE Format", "HR Ready", "Technical Report"],
+      num: "03", icon: "📄", title: "Project Docs & Interview Prep",
+      desc: "Organize your project decisions, architecture, and talking points into clear documentation you can understand and present honestly.",
+      tags: ["Project Report", "Presentation Prep", "Interview Practice"],
       cta: "See Pricing →",
     },
     {
-      num: "04", icon: "✨", title: "ATS Resume Builder",
-      desc: "Generate a polished, ATS-optimized resume tailored for tech roles. Fill in your details and get a ready-to-submit PDF in minutes.",
-      tags: ["ATS Optimized", "Tech Focused", "Instant PDF"],
+      num: "04", icon: "✨", title: "Free Resume Builder",
+      desc: "Create a clean, readable resume from your own experience and projects. Your details stay in your browser while you work.",
+      tags: ["Readable Layout", "Tech Focused", "PDF Export"],
       action: () => setPage("resume"),
       cta: "Build Free →",
     },
@@ -520,8 +520,8 @@ function Services({ setPage }) {
         <p className="flex items-center gap-3 text-cyan-400 font-mono text-xs tracking-widest uppercase mb-3">
           <span className="w-8 h-px bg-cyan-400 inline-block" />What We Offer
         </p>
-        <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ fontFamily: "'Orbitron', monospace" }}>Four Services.<br/>One Mission.</h2>
-        <p className="text-slate-400 text-base max-w-lg leading-relaxed">Everything a B.Tech student needs to go from campus to company — built, documented, and deployed.</p>
+        <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ fontFamily: "'Orbitron', monospace" }}>Practical Help.<br/>Real Understanding.</h2>
+        <p className="text-slate-400 text-base max-w-lg leading-relaxed">Build, present, and confidently discuss your own skills and projects.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
@@ -564,9 +564,9 @@ function Services({ setPage }) {
 // ─── PROJECT LEVELS ───────────────────────────────────────────────────────────
 function ProjectLevels() {
   const levels = [
-    { badge: "Easy", color: "green", bg: "from-green-500/10 to-green-900/5", border: "border-green-500/20", badgeCls: "bg-green-500/15 text-green-400 border-green-500/30", title: "Foundation Projects", desc: "Perfect for freshers building their first portfolio.", items: ["Todo App, Calculator, Weather App", "HTML / CSS / JS stack", "GitHub-ready code", "Basic deployment guide", "README documentation"] },
-    { badge: "⭐ Medium", color: "yellow", bg: "from-amber-500/10 to-amber-900/5", border: "border-amber-400/25", badgeCls: "bg-amber-500/15 text-amber-400 border-amber-400/30", title: "Advanced Projects", desc: "Full-stack apps for students targeting SDE roles.", items: ["E-commerce, Blog, Chat App", "React + Node + MongoDB", "Vercel / Railway deployment", "API integration included", "Full project documentation"], featured: true },
-    { badge: "High", color: "red", bg: "from-rose-500/10 to-rose-900/5", border: "border-rose-500/20", badgeCls: "bg-rose-500/15 text-rose-400 border-rose-500/30", title: "Pro-Level Projects", desc: "Complex systems demonstrating senior-level thinking.", items: ["AI/ML, DevOps, Microservices", "Production architecture", "CI/CD pipeline setup", "Technical interview report", "Scalability documentation"] },
+    { badge: "Easy", color: "green", bg: "from-green-500/10 to-green-900/5", border: "border-green-500/20", badgeCls: "bg-green-500/15 text-green-400 border-green-500/30", title: "Build the Foundations", desc: "Practice core web skills with a small project you can adapt and explain.", items: ["Todo, calculator, or weather app", "HTML / CSS / JavaScript", "Git and GitHub basics", "Deployment walkthrough", "README writing guidance"] },
+    { badge: "⭐ Medium", color: "yellow", bg: "from-amber-500/10 to-amber-900/5", border: "border-amber-400/25", badgeCls: "bg-amber-500/15 text-amber-400 border-amber-400/30", title: "Build a Full-Stack App", desc: "Learn how a front end, API, and database work together.", items: ["E-commerce, blog, or chat app", "React + Node + MongoDB", "API integration walkthrough", "Deployment guidance", "Project documentation practice"], featured: true },
+    { badge: "High", color: "red", bg: "from-rose-500/10 to-rose-900/5", border: "border-rose-500/20", badgeCls: "bg-rose-500/15 text-rose-400 border-rose-500/30", title: "Explore Advanced Systems", desc: "Explore architecture and trade-offs with a mentor as you build.", items: ["AI/ML, DevOps, or microservices", "Architecture and design choices", "CI/CD concepts", "Technical presentation practice", "Scalability trade-offs"] },
   ];
 
   return (
@@ -576,7 +576,7 @@ function ProjectLevels() {
           <span className="w-8 h-px bg-cyan-400" />Deploy-Ready Projects<span className="w-8 h-px bg-cyan-400" />
         </p>
         <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ fontFamily: "'Orbitron', monospace" }}>Pick Your Level</h2>
-        <p className="text-slate-400 max-w-lg mx-auto">All projects are production-grade, fully functional, and ready to show in interviews or deploy live on day one.</p>
+        <p className="text-slate-400 max-w-lg mx-auto">These are guided learning builds. Customize the work, follow your institution's rules, and be ready to explain your own contribution.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -607,10 +607,10 @@ function ProjectLevels() {
 // ─── HOW IT WORKS ─────────────────────────────────────────────────────────────
 function HowItWorks() {
   const steps = [
-    { n: "01", title: "Connect With Us", desc: "Reach out via WhatsApp or email. Tell us what you need — portfolio, project, docs, or resume." },
-    { n: "02", title: "Share Your Details", desc: "We collect your skills, projects, resume, and requirements to personalise the deliverable." },
-    { n: "03", title: "We Build It", desc: "Our team gets to work. Portfolios in 3–5 days. Projects and docs within 48–72 hours." },
-    { n: "04", title: "You Launch 🚀", desc: "Receive your finished product, fully reviewed and ready to deploy, share, or submit." },
+    { n: "01", title: "Tell Us Your Goal", desc: "Message us with your skill level and what you want to learn or improve." },
+    { n: "02", title: "Choose Your Support", desc: "Review what is included and the listed price. Ask us on WhatsApp if you want to clarify your scope before ordering." },
+    { n: "03", title: "Share Details & Start", desc: "Send your requirements and payment screenshot through WhatsApp. We review the request and confirm the plan before work begins." },
+    { n: "04", title: "Launch With Confidence", desc: "Get a walkthrough and next steps so you can maintain and explain your work." },
   ];
 
   return (
@@ -639,119 +639,19 @@ function HowItWorks() {
   );
 }
 
-// ─── CTA ──────────────────────────────────────────────────────────────────────
-// ─── TESTIMONIALS (commented out — uncomment when real reviews are ready) ──────
-/*
-function Testimonials() {
-  const reviews = [
-    {
-      name: "Rahul Sharma",
-      college: "JNTU Hyderabad, CSE Final Year",
-      avatar: "RS",
-      color: "from-blue-500 to-cyan-400",
-      rating: 5,
-      pack: "Resume Booster Pack",
-      text: "I had zero projects on my resume before this. After getting the Resume Booster Pack, I had 3 solid projects with full documentation. Got my first interview call within a week. Totally worth every rupee!",
-    },
-    {
-      name: "Priya Reddy",
-      college: "VIT Vellore, IT 3rd Year",
-      avatar: "PR",
-      color: "from-purple-500 to-pink-400",
-      rating: 5,
-      pack: "Job Ready Pack",
-      text: "The portfolio website they built for me is insane — my classmates kept asking who made it. The ATS resume is clean and professional. Already got shortlisted for 2 internships this month!",
-    },
-    {
-      name: "Karthik Naidu",
-      college: "Andhra University, ECE Final Year",
-      avatar: "KN",
-      color: "from-green-500 to-emerald-400",
-      rating: 5,
-      pack: "Starter Pack",
-      text: "As an ECE student switching to software, I had no idea where to start. They gave me a working project with GitHub setup and even helped me with how to explain it in interviews. Super responsive on WhatsApp!",
-    },
-    {
-      name: "Divya Lakshmi",
-      college: "SRM Chennai, CSE 4th Year",
-      avatar: "DL",
-      color: "from-amber-500 to-orange-400",
-      rating: 5,
-      pack: "Placement Pack",
-      text: "Got the full Placement Pack — portfolio, high-level project, IEEE docs, and ATS resume — all under ₹999 during the launch offer. The quality shocked me honestly. Landed a ₹4.5 LPA offer at campus placements!",
-    },
-  ];
-
-  return (
-    <section className="relative z-10 px-6 md:px-16 pb-28">
-      <div className="reveal text-center mb-14">
-        <p className="flex items-center justify-center gap-3 text-cyan-400 font-mono text-xs tracking-widest uppercase mb-3">
-          <span className="w-8 h-px bg-cyan-400" />Student Reviews<span className="w-8 h-px bg-cyan-400" />
-        </p>
-        <h2 className="text-4xl md:text-5xl font-black mb-4" style={{ fontFamily: "'Orbitron', monospace" }}>
-          What Students Say
-        </h2>
-        <p className="text-slate-400 max-w-lg mx-auto text-base">Real results from real B.Tech students across India.</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-        {reviews.map((r, i) => (
-          <div key={i} className="reveal group bg-[#0a1428]/70 border border-cyan-500/15 rounded-2xl p-8 backdrop-blur-xl hover:-translate-y-1 hover:border-cyan-500/30 transition-all duration-300"
-            style={{ transitionDelay: `${i * 80}ms` }}>
-            <div className="flex gap-1 mb-4">
-              {Array(r.rating).fill(0).map((_, j) => (
-                <span key={j} className="text-amber-400 text-sm">★</span>
-              ))}
-            </div>
-            <p className="text-slate-300 text-sm leading-relaxed mb-6 italic">"{r.text}"</p>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${r.color} flex items-center justify-center text-white text-xs font-black flex-shrink-0`}>
-                  {r.avatar}
-                </div>
-                <div>
-                  <p className="text-white font-bold text-sm">{r.name}</p>
-                  <p className="text-slate-500 text-xs font-mono">{r.college}</p>
-                </div>
-              </div>
-              <span className="text-xs font-mono bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 px-3 py-1 rounded-full hidden sm:block">
-                {r.pack}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="reveal mt-12 flex flex-wrap justify-center gap-8 text-center">
-        {[
-          { num: "500+", label: "Students Served" },
-          { num: "4.9★", label: "Average Rating" },
-          { num: "98%", label: "Would Recommend" },
-          { num: "72hrs", label: "Avg Delivery Time" },
-        ].map((s, i) => (
-          <div key={i}>
-            <p className="text-2xl font-black bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent"
-              style={{ fontFamily: "'Orbitron', monospace" }}>{s.num}</p>
-            <p className="text-slate-500 text-xs font-mono tracking-wide mt-1">{s.label}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-*/
 function FAQ() {
   const [open, setOpen] = useState(null);
 
   const faqs = [
-    { q: "How do I share my details after payment?", a: "After you confirm your order, we'll contact you on WhatsApp within 2–4 hours. You can share your requirements, resume, LinkedIn, GitHub — anything we need — directly on WhatsApp." },
-    { q: "What if I'm not satisfied with the work?", a: "We offer a free revision on every order. If you're still not satisfied after the revision, we'll redo it completely. Your confidence is our priority." },
-    { q: "How long does delivery take?", a: "Easy projects & docs: 1–2 days. Medium projects: 2–3 days. Portfolio websites: 3–5 days. Placement Pack: 5–7 days. We always deliver on time." },
-    { q: "Is the ATS Resume Builder really free?", a: "Yes, 100% free — no payment, no signup needed. Just fill your details, preview, and print as PDF. Always free." },
-    { q: "Can I use these projects in interviews?", a: "Absolutely! All projects are built to be interview-ready. The Resume Booster Pack even includes Mini Interview Q&A for each project so you can explain every line of code." },
-    { q: "Do you provide GitHub setup?", a: "Yes! We help you push the code to GitHub, write a proper README, and guide you on how to explain the project in interviews." },
+    { q: "What happens before I pay?", a: "Each package lists its price and included items. If you need to clarify whether your requirements fit, message us on WhatsApp before ordering." },
+    { q: "What if I need a change?", a: "Every order includes a free revision. We agree the requested scope and timeline over WhatsApp so expectations are clear." },
+    { q: "How long does delivery take?", a: "Current estimates are 1–2 days for foundation projects and docs, 2–3 days for medium projects, 3–5 days for portfolios, and 5–7 days for the Portfolio & Practice Pack. We confirm the estimate before payment." },
+    { q: "Is the Resume Builder free?", a: "Yes. You can enter your details, preview the resume, and use your browser's print dialog to save it as a PDF without signing up." },
+    { q: "Can I submit a guided project as my own?", a: "Use project guidance responsibly. Follow your college or employer's rules, customize the work yourself, and accurately describe your contribution. We do not promise grades, interviews, or jobs." },
+    { q: "Will I understand the project?", a: "The guided build includes walkthroughs and interview practice. Bring questions as you work so you can explain the decisions and code in your own words." },
+    { q: "Do you provide GitHub setup?", a: "GitHub setup guidance is included in selected packages. We can help you understand repositories, write a README, and publish your own work." },
     { q: "What payment methods do you accept?", a: "We accept all UPI payments — GPay, PhonePe, Paytm, BHIM, or any UPI app. Payment is fast, instant, and secure." },
-    { q: "Can I get a custom combo not listed here?", a: "Yes! WhatsApp us and tell us what you need. We'll build a custom package that fits your budget and requirements." },
+    { q: "Can I get a custom combo not listed here?", a: "Yes. Message us with your goal and budget. We will confirm what we can provide and the price before you decide to order." },
   ];
 
   return (
@@ -762,13 +662,13 @@ function FAQ() {
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-400 to-transparent" />
           <div className="text-4xl mb-3">🛡️</div>
           <h3 className="text-xl font-black text-white mb-2" style={{ fontFamily: "'Orbitron', monospace" }}>
-            100% Satisfaction Guarantee
+            Know What’s Included
           </h3>
           <p className="text-slate-400 max-w-lg mx-auto text-sm leading-relaxed">
-            Not happy with the result? We'll revise it for free. Still not satisfied? We'll redo it completely — no questions asked. Your trust means everything to us.
+            Each package lists its price, included deliverables, and estimated timing. If your requirements need a custom scope, message us before paying. Every order includes a free revision.
           </p>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
-            {["Free Revision", "On-Time Delivery", "WhatsApp Support", "No Hidden Charges"].map((g) => (
+            {["Free Revision", "Agreed Deliverables", "WhatsApp Support", "Price Confirmed First"].map((g) => (
               <span key={g} className="flex items-center gap-2 text-xs font-mono text-green-400 bg-green-500/10 border border-green-500/20 px-4 py-2 rounded-full">
                 <span>✓</span>{g}
               </span>
@@ -817,11 +717,11 @@ function CTA({ setPage }) {
           <span className="w-6 h-px bg-cyan-400" />Ready to Launch?<span className="w-6 h-px bg-cyan-400" />
         </p>
         <h2 className="text-3xl md:text-5xl font-black mb-4 leading-tight" style={{ fontFamily: "'Orbitron', monospace" }}>
-          Your career starts<br />
-          <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">here and now.</span>
+          Take the next step<br />
+          <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">with a clear plan.</span>
         </h2>
         <p className="text-slate-400 text-sm md:text-base mb-8 max-w-lg mx-auto leading-relaxed">
-          Join hundreds of B.Tech students who've used Aahnaa Technologies to break into the tech industry with confidence.
+          Tell us where you are in your learning journey. We’ll help you choose a practical next step—without promising a job or placement outcome.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
           <a href={`mailto:${MAIL}`}
@@ -848,61 +748,61 @@ function CTA({ setPage }) {
 // ─── PRICING ──────────────────────────────────────────────────────────────────
 const BUNDLES = [
   {
-    icon: "⚡", name: "Resume Booster Pack", badge: "🔥 Highest Demand",
+    icon: "⚡", name: "Resume Booster Pack", badge: "Build and Practice",
     highlight: true,
-    original: "₹2,499", price: "₹1,299", amount: 1299,
-    desc: "3 resume-ready projects that fill your resume, kill interview fear, and build real confidence.",
+    orderKey: "booster", price: "₹1,299", amount: 1299,
+    desc: "Three guided builds plus documentation and interview practice to help you learn by doing.",
     includes: [
-      "3 Projects: Easy + Medium + Advanced",
-      "Complete PDF Documentation",
-      "GitHub Setup Guidance",
-      "Resume Points — Ready to Copy",
-      "Mini Interview Q&A for each project",
+      "3 Guided Builds: Easy + Medium + Advanced",
+      "Project documentation examples",
+      "GitHub setup guidance",
+      "Resume bullet writing guidance",
+      "Practice questions for each build",
     ],
     color: "from-rose-500/15 to-orange-900/10", border: "border-rose-400/40", badgeCls: "bg-rose-500/15 text-rose-300 border-rose-400/30",
-    tag: "⚡ Best Seller",
+    tag: "Guided Learning Bundle",
   },
   {
-    icon: "🚀", name: "Starter Pack", badge: "Best for Freshers",
+    icon: "🚀", name: "Starter Pack", badge: "Start Here",
     highlight: false,
-    original: "₹999", price: "₹499", amount: 499,
-    desc: "Everything a fresher needs to start their job hunt.",
-    includes: ["Easy Deploy-Ready Project", "Basic Documentation", "GitHub-ready code", "README file", "Delivered in 2 days"],
+    orderKey: "starter", price: "₹499", amount: 499,
+    desc: "A focused first project with setup and documentation guidance.",
+    includes: ["Guided foundation project", "Basic documentation", "GitHub setup guidance", "README walkthrough", "Estimated 2-day delivery"],
     color: "from-green-500/10 to-green-900/5", border: "border-green-500/20", badgeCls: "bg-green-500/15 text-green-400 border-green-500/30",
   },
   {
-    icon: "💼", name: "Job Ready Pack", badge: "⭐ Most Popular",
+    icon: "💼", name: "Job Ready Pack", badge: "Project Practice",
     highlight: false,
-    original: "₹1,999", price: "₹999", amount: 999,
-    desc: "The complete package most students choose for placements.",
-    includes: ["Medium Full-Stack Project", "Pro IEEE Documentation", "ATS Resume (Free)", "Vercel Deployment", "Delivered in 3 days"],
+    orderKey: "jobready", price: "₹999", amount: 999,
+    desc: "A guided full-stack build with a portfolio and interview practice focus.",
+    includes: ["Medium full-stack guided build", "Project documentation guidance", "Free resume builder", "Deployment walkthrough", "Estimated 3-day delivery"],
     color: "from-blue-500/15 to-cyan-900/10", border: "border-cyan-400/40", badgeCls: "bg-cyan-500/15 text-cyan-400 border-cyan-400/30",
   },
   {
-    icon: "👑", name: "Placement Pack", badge: "Maximum Value",
+    icon: "👑", name: "Placement Pack", badge: "Portfolio + Practice",
     highlight: false,
-    original: "₹3,499", price: "₹1,799", amount: 1799,
-    desc: "The ultimate bundle for students targeting top companies.",
-    includes: ["Pro Portfolio Website", "High-Level Project (AI/ML/DevOps)", "Premium IEEE Docs + PPT", "ATS Resume (Free)", "Delivered in 5–7 days"],
+    orderKey: "placement", price: "₹1,799", amount: 1799,
+    desc: "Portfolio support, an advanced guided build, and presentation practice.",
+    includes: ["Portfolio website support", "Advanced guided project", "Project report and presentation guidance", "Free resume builder", "Estimated 5–7 day delivery"],
     color: "from-amber-500/10 to-amber-900/5", border: "border-amber-400/25", badgeCls: "bg-amber-500/15 text-amber-400 border-amber-400/30",
   },
   {
-    icon: "🌐", name: "Portfolio Pack", badge: "Stand Out Online",
+    icon: "🌐", name: "Portfolio Pack", badge: "Show Your Work",
     highlight: false,
-    original: "₹1,799", price: "₹849", amount: 849,
-    desc: "A stunning portfolio + ATS resume to impress recruiters.",
-    includes: ["Pro Portfolio Website", "Custom Design + Animations", "ATS Resume (Free)", "Mobile Responsive", "Delivered in 4 days"],
+    orderKey: "portfolio", price: "₹849", amount: 849,
+    desc: "A responsive portfolio that presents your real work and learning clearly.",
+    includes: ["Portfolio website support", "Responsive design", "Free resume builder", "Personalization guidance", "Estimated 4-day delivery"],
     color: "from-purple-500/10 to-purple-900/5", border: "border-purple-400/20", badgeCls: "bg-purple-500/15 text-purple-400 border-purple-400/30",
   },
 ];
 
 const ADDONS = [
-  { icon: "🌐", name: "Portfolio Website", tiers: [{ t: "Basic", p: "₹349", a: 349 }, { t: "Pro", p: "₹699", a: 699 }, { t: "Premium", p: "₹1,499", a: 1499 }] },
-  { icon: "🚀", name: "Deploy-Ready Project", tiers: [{ t: "Easy", p: "₹349", a: 349 }, { t: "Medium", p: "₹549", a: 549 }, { t: "High", p: "₹849", a: 849 }] },
-  { icon: "📄", name: "Interview Docs", tiers: [{ t: "Basic", p: "₹199", a: 199 }, { t: "Pro", p: "₹349", a: 349 }, { t: "Premium", p: "₹599", a: 599 }] },
+  { icon: "🌐", name: "Portfolio Website", orderKey: "port_ind", tiers: [{ t: "Basic", p: "₹349", a: 349 }, { t: "Pro", p: "₹699", a: 699 }, { t: "Premium", p: "₹1,499", a: 1499 }] },
+  { icon: "🚀", name: "Guided Project Build", orderKey: "proj_ind", tiers: [{ t: "Easy", p: "₹349", a: 349 }, { t: "Medium", p: "₹549", a: 549 }, { t: "High", p: "₹849", a: 849 }] },
+  { icon: "📄", name: "Project Docs & Interview Prep", orderKey: "docs_ind", tiers: [{ t: "Basic", p: "₹199", a: 199 }, { t: "Pro", p: "₹349", a: 349 }, { t: "Premium", p: "₹599", a: 599 }] },
 ];
 
-function Pricing({ setPage }) {
+function Pricing({ setPage, onOrder }) {
   const [tab, setTab] = useState("bundles");
 
   return (
@@ -917,24 +817,22 @@ function Pricing({ setPage }) {
           <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Prices</span>
         </h2>
         <p className="text-slate-400 max-w-lg mx-auto text-base leading-relaxed">
-          Combo packs give you the best value. Individual services available as add-ons.
+          See the listed price and included items for each package. Message us if you want to clarify your scope before ordering.
         </p>
       </div>
 
-      {/* 🎉 Launch Offer Banner */}
+      {/* Clear pricing banner */}
       <div className="reveal max-w-3xl mx-auto mb-10">
-        <div className="relative rounded-2xl border border-amber-400/30 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 backdrop-blur-xl px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 overflow-hidden">
+          <div className="relative rounded-2xl border border-cyan-400/20 bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-blue-500/10 backdrop-blur-xl px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent animate-pulse" />
           <div className="flex items-center gap-4">
-            <span className="text-3xl">🎉</span>
+            <span className="text-3xl">🧾</span>
             <div>
-              <p className="text-amber-300 font-bold text-sm tracking-wide" style={{ fontFamily: "'Orbitron', monospace" }}>TRUSTED BY 20+ HAPPY CLIENTS ⭐</p>
-              <p className="text-slate-400 text-xs mt-0.5 font-mono">Premium quality, proven results — still the best value for B.Tech students.</p>
+              <p className="text-cyan-300 font-bold text-sm tracking-wide" style={{ fontFamily: "'Orbitron', monospace" }}>CLEAR PRICING. CLEAR DELIVERABLES.</p>
+              <p className="text-slate-400 text-xs mt-0.5 font-mono">Review the package details, then ask us if your needs differ.</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 bg-amber-500/20 border border-amber-400/30 rounded-xl px-5 py-2 whitespace-nowrap">
-            <span className="text-amber-300 font-black text-lg" style={{ fontFamily: "'Orbitron', monospace" }}>UP TO 75% OFF</span>
-          </div>
+          <span className="text-cyan-300 text-xs font-mono">Career support, not job guarantees</span>
         </div>
       </div>
 
@@ -973,7 +871,6 @@ function Pricing({ setPage }) {
                       <div className="flex items-center gap-3 mb-3">
                         <span className="text-3xl">{b.icon}</span>
                         <span className="px-3 py-1 rounded-full bg-rose-500/20 border border-rose-400/40 text-rose-300 text-xs font-bold tracking-widest">{b.tag}</span>
-                        <span className="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-mono">⭐ 20+ Happy Clients</span>
                       </div>
                       <h3 className="text-2xl md:text-3xl font-black text-white mb-2" style={{ fontFamily: "'Orbitron', monospace" }}>{b.name}</h3>
                       <p className="text-slate-300 text-sm leading-relaxed mb-5 max-w-lg">{b.desc}</p>
@@ -999,18 +896,17 @@ function Pricing({ setPage }) {
                     {/* Right — Price + CTA */}
                     <div className="flex flex-col items-center gap-4 min-w-[180px]">
                       <div className="text-center">
-                        <p className="text-slate-500 text-xs font-mono mb-1">Launch Offer</p>
+                        <p className="text-slate-500 text-xs font-mono mb-1">Package price</p>
                         <div className="flex items-end gap-2 justify-center">
                           <span className="text-5xl font-black text-white" style={{ fontFamily: "'Orbitron', monospace" }}>{b.price}</span>
                         </div>
-                        <span className="text-slate-500 text-sm line-through font-mono">{b.original}</span>
                       </div>
-                      <button onClick={() => setPage("order")}
+                      <button onClick={() => onOrder({ service: b.orderKey })}
                         className="w-full px-8 py-4 rounded-2xl text-white font-black tracking-widest uppercase text-sm shadow-2xl shadow-rose-500/30 hover:shadow-rose-500/60 hover:-translate-y-1 transition-all cursor-pointer"
                         style={{ fontFamily: "'Orbitron', monospace", background: "linear-gradient(135deg, #ff4d6d, #ff8c42)" }}>
                         Get This Pack →
                       </button>
-                      <p className="text-slate-600 text-xs font-mono text-center">Limited time only!</p>
+                      <p className="text-slate-500 text-xs font-mono text-center">Ask us to confirm scope and delivery timing.</p>
                     </div>
                   </div>
                 </div>
@@ -1031,7 +927,6 @@ function Pricing({ setPage }) {
                 <p className="text-slate-400 text-xs leading-relaxed mb-5">{b.desc}</p>
                 <div className="flex items-end gap-2 mb-5">
                   <span className="text-4xl font-black text-white" style={{ fontFamily: "'Orbitron', monospace" }}>{b.price}</span>
-                  <span className="text-slate-500 text-base line-through font-mono mb-1">{b.original}</span>
                 </div>
                 <div className="h-px bg-white/5 mb-5" />
                 <ul className="space-y-2.5 mb-6 flex-1">
@@ -1042,7 +937,7 @@ function Pricing({ setPage }) {
                     </li>
                   ))}
                 </ul>
-                <button onClick={() => setPage("order")}
+                <button onClick={() => onOrder({ service: b.orderKey })}
                   className={`w-full py-3 rounded-xl text-xs font-bold tracking-widest uppercase transition-all hover:-translate-y-0.5 cursor-pointer border ${b.border} ${b.badgeCls} hover:opacity-80`}
                   style={{ fontFamily: "'Orbitron', monospace" }}>
                   Get This Pack →
@@ -1071,7 +966,7 @@ function Pricing({ setPage }) {
                   <div key={ti} className="bg-[#0a1428]/70 border border-cyan-500/15 rounded-2xl p-6 flex flex-col hover:-translate-y-1 transition-all">
                     <span className="text-xs font-mono text-slate-500 tracking-widest uppercase mb-2">{tier.t}</span>
                     <span className="text-3xl font-black text-white mb-4" style={{ fontFamily: "'Orbitron', monospace" }}>{tier.p}</span>
-                    <button onClick={() => setPage("order")}
+                    <button onClick={() => onOrder({ service: svc.orderKey, tier: tier.t })}
                       className="mt-auto w-full py-2.5 rounded-xl border border-cyan-500/25 text-cyan-400 text-xs font-mono tracking-widest uppercase hover:bg-cyan-500/10 hover:border-cyan-400 transition-all cursor-pointer">
                       Order →
                     </button>
@@ -1085,7 +980,7 @@ function Pricing({ setPage }) {
             <div className="flex items-center gap-3">
               <span className="text-2xl">✨</span>
               <div>
-                <h3 className="font-bold text-sm text-white" style={{ fontFamily: "'Orbitron', monospace" }}>ATS Resume Builder</h3>
+                <h3 className="font-bold text-sm text-white" style={{ fontFamily: "'Orbitron', monospace" }}>Free Resume Builder</h3>
                 <p className="text-slate-400 text-xs mt-0.5">Always free — no payment needed</p>
               </div>
             </div>
@@ -1127,7 +1022,7 @@ function Footer({ setPage }) {
 }
 
 // ─── HOME PAGE ────────────────────────────────────────────────────────────────
-function HomePage({ setPage }) {
+function HomePage({ setPage, onOrder }) {
   useReveal();
   return (
     <>
@@ -1136,7 +1031,7 @@ function HomePage({ setPage }) {
       <Services setPage={setPage} />
       <ProjectLevels />
       <HowItWorks />
-      <Pricing setPage={setPage} />
+      <Pricing setPage={setPage} onOrder={onOrder} />
       {/* <Testimonials /> */}
       <FAQ />
       <CTA setPage={setPage} />
@@ -1350,11 +1245,19 @@ function ResumeBuilder() {
 
   // Auto-save on every change (gracefully skips if storage unavailable)
   useEffect(() => {
+    let savedTimer;
+    let resetTimer;
     try {
       localStorage.setItem("aahnaa_resume", JSON.stringify(data));
-      setAutoSaved(true);
-      setTimeout(() => setAutoSaved(false), 1500);
-    } catch {}
+      savedTimer = setTimeout(() => setAutoSaved(true), 0);
+      resetTimer = setTimeout(() => setAutoSaved(false), 1500);
+    } catch (error) {
+      console.warn("Resume auto-save is unavailable in this browser.", error);
+    }
+    return () => {
+      clearTimeout(savedTimer);
+      clearTimeout(resetTimer);
+    };
   }, [data]);
 
   const steps = ["Personal Info", "Objective", "Education", "Skills", "Projects", "Experience", "Certifications & Achievements"];
@@ -1382,7 +1285,7 @@ function ResumeBuilder() {
   };
 
   // ── RESUME PREVIEW ─────────────────────────────────────────────────────────
-  const ResumePreview = () => (
+  const renderResumePreview = () => (
     <div ref={printRef} className="bg-white text-gray-900 p-10 max-w-3xl mx-auto shadow-2xl rounded-lg" style={{ fontFamily: "Georgia, serif", fontSize: "13px", lineHeight: "1.5" }}>
       {/* Header */}
       <div className="text-center border-b-2 border-gray-800 pb-4 mb-4">
@@ -1496,7 +1399,7 @@ function ResumeBuilder() {
       const content = printRef.current?.innerHTML;
       const w = window.open("", "_blank");
       if (w) {
-        w.document.write(`<html><head><title>${data.name || "Resume"} - Resume</title><link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"><style>body{margin:0;padding:20px;background:white;}@media print{body{padding:0;}}</style></head><body>${content}<script>window.print();<\/script></body></html>`);
+        w.document.write(`<html><head><title>${data.name || "Resume"} - Resume</title><link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"><style>body{margin:0;padding:20px;background:white;}@media print{body{padding:0;}}</style></head><body>${content}<script>window.print();</script></body></html>`);
         w.document.close();
       }
     } catch { alert("Please use your browser's print function (Ctrl+P) to save as PDF."); }
@@ -1507,7 +1410,7 @@ function ResumeBuilder() {
       {/* Page Header */}
       <div className="text-center mb-12">
         <p className="flex items-center justify-center gap-3 text-cyan-400 font-mono text-xs tracking-widest uppercase mb-3">
-          <span className="w-8 h-px bg-cyan-400" />ATS Resume Builder<span className="w-8 h-px bg-cyan-400" />
+          <span className="w-8 h-px bg-cyan-400" />Free Resume Builder<span className="w-8 h-px bg-cyan-400" />
         </p>
         <h2 className="text-4xl md:text-5xl font-black mb-3" style={{ fontFamily: "'Orbitron', monospace" }}>Build Your Resume</h2>
         <p className="text-slate-400 max-w-lg mx-auto">Fill in your details step-by-step. Your progress is auto-saved. ✅</p>
@@ -1576,7 +1479,7 @@ function ResumeBuilder() {
             </div>
           </div>
           <div className="bg-gray-100 rounded-2xl p-4">
-            <ResumePreview />
+            {renderResumePreview()}
           </div>
         </div>
       )}
@@ -1588,8 +1491,8 @@ function ResumeBuilder() {
 const SERVICES_CONFIG = {
   booster:   { label: "⚡ Resume Booster Pack – 3 Projects", tiers: { "Resume Booster Pack": 1299 } },
   starter:   { label: "🚀 Starter Pack",        tiers: { "Starter Pack": 499 } },
-  jobready:  { label: "💼 Job Ready Pack",       tiers: { "Job Ready Pack": 999 } },
-  placement: { label: "👑 Placement Pack",       tiers: { "Placement Pack": 1799 } },
+  jobready:  { label: "💼 Full-Stack Practice Pack", tiers: { "Full-Stack Practice Pack": 999 } },
+  placement: { label: "👑 Portfolio & Practice Pack", tiers: { "Portfolio & Practice Pack": 1799 } },
   portfolio: { label: "🌐 Portfolio Pack",       tiers: { "Portfolio Pack": 849 } },
   port_ind:  { label: "🌐 Portfolio Website",    tiers: { Basic: 349, Pro: 699, Premium: 1499 } },
   proj_ind:  { label: "🚀 Deploy-Ready Project", tiers: { Easy: 349, Medium: 549, High: 849 } },
@@ -1598,22 +1501,27 @@ const SERVICES_CONFIG = {
 
 const UPI_ID = "7093525891@ptsbi";
 
-function OrderPage({ setPage }) {
+function OrderPage({ setPage, initialSelection }) {
   const [step, setStep] = useState(1); // 1=Select, 2=Details, 3=Payment, 4=Done
-  const [service, setService] = useState("");
-  const [tier, setTier] = useState("");
+  const [service, setService] = useState(initialSelection?.service ?? "");
+  const [tier, setTier] = useState(initialSelection?.tier ?? (initialSelection?.service ? Object.keys(SERVICES_CONFIG[initialSelection.service]?.tiers ?? {})[0] ?? "" : ""));
   const [form, setForm] = useState({ name: "", email: "", phone: "", requirement: "" });
   const [screenshot, setScreenshot] = useState(null);
   const [screenshotPreview, setScreenshotPreview] = useState(null);
   const [sending, setSending] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [whatsappOrderUrl, setWhatsappOrderUrl] = useState(WA_LINK);
 
   const amount = service && tier ? SERVICES_CONFIG[service]?.tiers[tier] : null;
 
-  const copyUPI = () => {
-    try { navigator.clipboard.writeText(UPI_ID); } catch { }
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const copyUPI = async () => {
+    try {
+      await navigator.clipboard.writeText(UPI_ID);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
   };
 
   const handleScreenshot = (e) => {
@@ -1654,11 +1562,11 @@ function OrderPage({ setPage }) {
       `📸 *Payment Screenshot:* Sending separately in this chat.\n\n` +
       `✅ Please verify and confirm my order.`
     );
-    setTimeout(() => {
-      try { window.open(`https://wa.me/917093525891?text=${msg}`, "_blank"); } catch { }
-      setSending(false);
-      setStep(4);
-    }, 1000);
+    const orderUrl = `https://wa.me/${PHONE}?text=${msg}`;
+    setWhatsappOrderUrl(orderUrl);
+    window.open(orderUrl, "_blank", "noopener,noreferrer");
+    setSending(false);
+    setStep(4);
   };
 
   const canProceedStep1 = service && tier;
@@ -1666,7 +1574,7 @@ function OrderPage({ setPage }) {
   const canConfirm = screenshot;
 
   // Progress bar
-  const Progress = () => {
+  const renderProgress = () => {
     const getStepCls = (i) => step > i + 1
       ? "bg-green-500 text-white"
       : step === i + 1
@@ -1701,7 +1609,7 @@ function OrderPage({ setPage }) {
 
       {/* Progress */}
       <div className="max-w-xl mx-auto mb-8">
-        <Progress />
+        {renderProgress()}
       </div>
 
       {/* ── STEP 1: Two column on desktop ── */}
@@ -1716,10 +1624,10 @@ function OrderPage({ setPage }) {
             <p className="text-xs font-mono text-amber-400/80 tracking-widest uppercase mb-2">🔥 Combo Packs</p>
             <div className="space-y-2 mb-4">
               {[
-                { key: "booster",   label: "⚡ Resume Booster Pack", price: "₹1,299", badge: "🔥 Best Seller" },
+                { key: "booster",   label: "⚡ Resume Booster Pack", price: "₹1,299", badge: "Guided learning" },
                 { key: "starter",   label: "🚀 Starter Pack",         price: "₹499", badge: "Freshers" },
-                { key: "jobready",  label: "💼 Job Ready Pack",        price: "₹999", badge: "⭐ Popular" },
-                { key: "placement", label: "👑 Placement Pack",        price: "₹1,799", badge: "Max Value" },
+                { key: "jobready",  label: "💼 Full-Stack Practice Pack", price: "₹999", badge: "Project practice" },
+                { key: "placement", label: "👑 Portfolio & Practice Pack", price: "₹1,799", badge: "Portfolio support" },
                 { key: "portfolio", label: "🌐 Portfolio Pack",        price: "₹849", badge: "Stand Out" },
               ].map((s) => (
                 <button key={s.key} onClick={() => { setService(s.key); setTier(Object.keys(SERVICES_CONFIG[s.key].tiers)[0]); }}
@@ -1845,6 +1753,9 @@ function OrderPage({ setPage }) {
               placeholder="Describe what you need — tech stack, project idea, domain, specific requirements..."
               className="w-full bg-[#050b18] border border-cyan-500/20 rounded-xl px-4 py-3 text-slate-200 text-sm placeholder-slate-600 focus:outline-none focus:border-cyan-400/50 transition-all resize-none" />
           </div>
+          <p className="text-xs text-slate-500 leading-relaxed mb-4">
+            When you continue, your contact details and requirements are sent to Aahnaa’s order system and included in the WhatsApp order draft. Please don’t include passwords or sensitive personal information.
+          </p>
           <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-center justify-between mb-5">
             <p className="text-slate-300 text-sm truncate pr-2">{SERVICES_CONFIG[service]?.label}</p>
             <span className="text-xl font-black text-cyan-400 flex-shrink-0" style={{ fontFamily: "'Orbitron', monospace" }}>₹{amount}</span>
@@ -1894,7 +1805,7 @@ function OrderPage({ setPage }) {
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
                       </span>
-                      <span className="text-green-400 text-xs font-mono">Secure Payment</span>
+                      <span className="text-green-400 text-xs font-mono">Pay using your UPI app</span>
                     </div>
                   </div>
 
@@ -1982,14 +1893,14 @@ function OrderPage({ setPage }) {
                   {screenshotPreview ? (
                     <div className="flex flex-col items-center gap-2">
                       <img src={screenshotPreview} alt="Screenshot" className="h-28 rounded-xl object-contain shadow-lg" />
-                      <span className="text-green-400 text-xs font-mono mt-1">✓ Screenshot uploaded!</span>
+                      <span className="text-green-400 text-xs font-mono mt-1">✓ Screenshot selected on this device</span>
                       <span className="text-slate-500 text-xs font-mono">Click to change</span>
                     </div>
                   ) : (
                     <div className="flex flex-col items-center gap-2">
                       <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-2xl mb-1">📸</div>
-                      <span className="text-slate-300 text-sm font-medium">Upload payment screenshot</span>
-                      <span className="text-slate-500 text-xs font-mono">JPG, PNG supported</span>
+                      <span className="text-slate-300 text-sm font-medium">Select payment screenshot for WhatsApp</span>
+                      <span className="text-slate-500 text-xs font-mono">You’ll attach it in WhatsApp · JPG or PNG</span>
                     </div>
                   )}
                   <input type="file" accept="image/*" className="hidden" onChange={handleScreenshot} />
@@ -2004,7 +1915,7 @@ function OrderPage({ setPage }) {
                 <button onClick={handleConfirm} disabled={!canConfirm || sending}
                   className="flex-1 py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-400 text-white font-bold tracking-widest uppercase text-sm shadow-lg shadow-green-500/20 hover:-translate-y-0.5 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                   style={{ fontFamily: "'Orbitron', monospace" }}>
-                  {sending ? "Sending..." : "✓ Confirm Order via WhatsApp"}
+                  {sending ? "Preparing..." : "Continue to WhatsApp →"}
                 </button>
               </div>
             </div>
@@ -2015,16 +1926,16 @@ function OrderPage({ setPage }) {
             <div className="max-w-md mx-auto">
               <div className="bg-[#0a1428]/80 border border-cyan-500/15 rounded-2xl p-6 backdrop-blur-xl text-center space-y-5">
                 <div className="text-6xl animate-bounce">🚀</div>
-                <h3 className="text-2xl font-black text-white" style={{ fontFamily: "'Orbitron', monospace" }}>Order Confirmed!</h3>
-                <p className="text-slate-400 text-sm">Your order is placed! Here's exactly what happens next 👇</p>
+                <h3 className="text-2xl font-black text-white" style={{ fontFamily: "'Orbitron', monospace" }}>Finish Your WhatsApp Request</h3>
+                <p className="text-slate-400 text-sm">Your order details are ready. Send the WhatsApp message and attach your payment screenshot. We’ll confirm your order after reviewing it.</p>
 
                 <div className="bg-[#050b18] border border-cyan-500/15 rounded-2xl p-5 text-left space-y-4">
                   <p className="text-xs font-mono text-cyan-400/80 tracking-widest uppercase">What Happens Next</p>
                   {[
-                    { time: "Within 30 min", icon: "💬", text: "We verify your payment & confirm on WhatsApp" },
-                    { time: "Within 2 hrs",  icon: "📋", text: "We ask for your requirements & details" },
-                    { time: "On time",       icon: "⚡", text: "We build & deliver to your WhatsApp/Email" },
-                    { time: "After delivery",icon: "✅", text: "Free revision if needed — no questions asked" },
+                    { time: "Your next step", icon: "💬", text: "Send the prepared order message and payment screenshot in WhatsApp" },
+                    { time: "After we receive it", icon: "📋", text: "We verify payment and confirm the agreed scope and timeline" },
+                    { time: "During the project", icon: "⚡", text: "We share progress and answer questions as agreed" },
+                    { time: "At handoff", icon: "✅", text: "You receive the deliverables and the included revision support" },
                   ].map((s, i) => (
                     <div key={i} className="flex items-start gap-3">
                       <span className="text-xl flex-shrink-0">{s.icon}</span>
@@ -2038,7 +1949,7 @@ function OrderPage({ setPage }) {
 
                 <div className="bg-amber-500/10 border border-amber-400/20 rounded-xl p-4">
                   <p className="text-amber-300 text-sm font-mono text-center">
-                    📸 <strong>Important:</strong> Send your payment screenshot on WhatsApp now!
+                    📸 <strong>One last step:</strong> attach your payment screenshot in the WhatsApp chat. Your request is not confirmed until we reply.
                   </p>
                 </div>
 
@@ -2054,9 +1965,9 @@ function OrderPage({ setPage }) {
                     className="px-6 py-3 rounded-xl border border-cyan-500/30 text-cyan-400 font-mono text-sm hover:bg-cyan-500/10 transition-all cursor-pointer">
                     ← Home
                   </button>
-                  <a href={WA_LINK} target="_blank" rel="noreferrer"
+                  <a href={whatsappOrderUrl} target="_blank" rel="noreferrer"
                     className="px-6 py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-400 text-white font-bold text-sm shadow-lg transition-all">
-                    💬 Chat on WhatsApp
+                    💬 Open WhatsApp Order
                   </a>
                 </div>
               </div>
@@ -2070,6 +1981,11 @@ function OrderPage({ setPage }) {
 // ─── ROOT APP ─────────────────────────────────────────────────────────────────
 export default function App() {
   const [page, setPage] = useState("home");
+  const [orderSelection, setOrderSelection] = useState(null);
+  const setOrderSelectionAndOpen = (selection) => {
+    setOrderSelection(selection);
+    setPage("order");
+  };
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, [page]);
 
@@ -2091,9 +2007,9 @@ export default function App() {
       <AnimatedBackground />
       <Nav page={page} setPage={setPage} />
       <main style={{ position: "relative", zIndex: 1 }}>
-        {page === "home"   && <HomePage setPage={setPage} />}
+        {page === "home"   && <HomePage setPage={setPage} onOrder={setOrderSelectionAndOpen} />}
         {page === "resume" && <ResumeBuilder />}
-        {page === "order"  && <OrderPage setPage={setPage} />}
+        {page === "order"  && <OrderPage setPage={setPage} initialSelection={orderSelection} />}
       </main>
       <Footer setPage={setPage} />
     </div>
